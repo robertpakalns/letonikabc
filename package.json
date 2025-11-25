@@ -1,0 +1,27 @@
+{
+  "type": "module",
+  "name": "letonikabc",
+  "version": "1.0.0",
+  "description": "Tīmekļa vietne, kurā lietotājs lejupielādē teksta failu no letonika.lv vietnes un izmanto kā alternatīvu lasītāvu",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "letonika",
+    "reader",
+    "rust",
+    "wasm"
+  ],
+  "author": "robertpakalns",
+  "dependencies": {
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/react-dom": "^19.2.3",
+    "react": "^19.2.0",
+    "vite": "^7.2.4"
+  }
+}
