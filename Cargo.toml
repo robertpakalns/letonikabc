@@ -1,0 +1,11 @@
+[package]
+name = "letonikabc"
+version = "0.1.0"
+authors = ["robertpakalns"]
+edition = "2024"
+description = "Tīmekļa vietne, kurā lietotājs lejupielādē teksta failu no letonika.lv vietnes un izmanto kā alternatīvu lasītāvu"
+
+[dependencies]
+wasm-bindgen = "0.2.105"
+wasm-bindgen-futures = "0.4.55"
+web-sys = "0.3.82"
