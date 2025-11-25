@@ -1,7 +1,7 @@
 # LetonikaBC
 Letonika Better Client 
 
-Tīmekļa vietne, kurā lietotājs lejupielādē teksta failu no [letonika.lv](https://letonika.lv) vietnes un izmanto kā alternatīvu lasītāvu.
+Tīmekļa vietne, kurā lietotājs lejupielādē teksta failu no [letonika.lv](https://letonika.lv) vietnes un izmanto kā alternatīvu lasītāvu
 
 ## Sistēmas vienkāršots modelis  
 
