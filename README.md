@@ -7,16 +7,7 @@ Tīmekļa vietne, kurā lietotājs lejupielādē teksta failu no [letonika.lv](h
 
 ###  Modeļa objekti  
 
-* Teksta fails no `letonika.lv`  
-Sākotnējais saturs, ko lietotājs importē no savas ierīces un izmanto lasīšanai
-* Apstrādāts dokuments  
-Sistēmas izveidots, lietošanai pielāgots dokuments, ar kuru lietotājs strādā vietnē
-* Meklēšanas filtrs  
-Modulis, kas ļauj lietotājam atrast tekstu dokumentā
-* Iebūvētā datubāze  
-Pārlūkprogrammas lokālā krātuve, kur tiek saglabāti dokumenti un informācija par tiem
-* Dokumentu apstrādes modulis  
-Iekšējais sistēmas mehānisms, kas pārveido sākotnējo tekstu lietotājam draudzīgā formā
+![Modeļa objekti un to saites](https://raw.githubusercontent.com/robertpakalns/letonikabc/main/assets/readme-saites.svg)
 
 ### Modeļa objektu saites
 1. LIETOTĀJS lejupielādē TEKSTA FAILU
