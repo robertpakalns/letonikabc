@@ -19,7 +19,16 @@ Pārlūkprogrammas lokālā krātuve, kur tiek saglabāti dokumenti un informāc
 Iekšējais sistēmas mehānisms, kas pārveido sākotnējo tekstu lietotājam draudzīgā formā
 
 ### Modeļa objektu saites
-...
+1. LIETOTĀJS lejupielādē TEKSTA FAILU
+2. TEKSTA APSTRĀDES MODULIS apstrādā TEKSTA FAILU
+3. TEKSTA APSTRĀDES MODULIS izveido APSTRĀDĀTO DOKUMENTU
+4. APSTRĀDĀTS DOKUMENTS tiek saglabāts IEBŪVĒTĀ DATUBĀZĒ; IEBŪVĒTĀ DATUBĀZE atgriež saglabāto APSTRĀDĀTO DOKUMENTU
+5. LASĪTAVA pieprasa dokumentu IEBŪVĒTĀ DATUBĀZĒ
+6. LIETOTĀJS izmanto LASĪTAVU
+7. LASĪTAVA atgriež tekstu TEKSTA APSTRĀDES MODULIM
+8. TEKSTA APSTRĀDES MODULIS saglabā apstrādāto tekstu IEBŪVĒTĀ DATUBĀZE
+9. LIETOTĀJS lasa APSTRĀDĀTO DOKUMENTU
+10. LIETOTĀJS izmanto TEKSTA APSTRĀDES MODUĻA filtrēšanas funkcijas
 
 ## Datu vārdnīca
 
