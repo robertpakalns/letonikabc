@@ -62,3 +62,48 @@ Iekšējais sistēmas mehānisms, kas pārveido sākotnējo tekstu lietotājam d
 9. Sistēma ļauj lietotājam ierobežot meklēšanu uz izvēlētām teksta daļām.
 10. Sistēma ļauj lietotājam labot dokumenta nosaukumu un autoru.
 11. Sistēma ļauj importēt un eksportēt dokumentus `.md` formātā.
+
+## Nefunkcionālās prasības
+
+### Prasības procesam
+* Strukturēta moduļu arhitektūra
+* Stingra tipizācija lietotāja saskarnes izstrādē
+* Automatizēta testēšana teksta apstrādes un meklēšanas funkcijām
+* Datu atjaunināšana bez lietotāja saglabāto datu bojāšanas
+* Automātiska sistēmas būvēšana un izvietošana
+
+### Prasības produktam
+* Sistēmas Lietotāja saskarne reaģē ne vēlāk kā 0.5 sekunžu laikā
+* Sistēma apstrādā tekstu ne lēnāk kā 3 sekunžu laikā
+* Sistēma darbojas bez papildu programmu instalēšanas
+* Sistēma spēj darboties bez interneta pieslēguma
+
+### Ārējās prasības
+Operētājsistēmas, kuras atbalstīs sistēmu:
+* Windows 11
+* Linux (Lubuntu 24.04)
+* Android 15
+
+Pārlūkprogrammas, kuras atbalstīs sistēmu:
+* Google Chrome
+* Mozilla Firefox
+* Microsoft Edge
+
+### Nefunkcionālās prasības 5 funkcijām
+* Teksta faila importēšana
+  * Maksimālais faila ielādes laiks: 3 sekundes
+  * Atbalstītais faila izmērs: līdz 15 MB
+
+* Dokumenta saglabāšana
+  * Saglabāšanas laiks: līdz 1 sekundei
+
+* Dokumenta atvēršana
+  * Atvēršanas laiks: līdz 0.5 sekundēm
+  * Navigācijai jāparādās automātiski
+
+* Teksta meklēšana
+  * Rezultātu parādīšanas laiks: līdz 1 sekundei
+  * Jāatbalsta vismaz 100,000 simbolu apjoms
+
+* Dokumentu imports/eksports
+  * Faila apstrādes laiks: līdz 3 sekundēm
