@@ -10,18 +10,18 @@ Tīmekļa vietne, kurā lietotājs lejupielādē teksta failu no [letonika.lv](h
 ![Modeļa objekti un to saites](https://raw.githubusercontent.com/robertpakalns/letonikabc/main/assets/readme-saites.svg)
 
 ### Modeļa objektu saites
-1. TEKSTA MODULIS apstrādā TEKSTA FAILU un izveido APSTRĀDĀTO DOKUMENTU
-2. LASĪTAVA pieprasa dokumentu IEBŪVĒTĀ DATUBĀZĒ;
-3. IEBŪVĒTĀ DATUBĀZE atgriež APSTRĀDĀTO DOKUMENTU, izmantojot METADATUS
-4. LIETOTĀJS izmanto APSTRĀDĀTO DOKUMENTU lasīšanai
-5. TEKSTA MODULIS saņem METADATUS no TEKSTA FAILA
-6. LIETOTĀJS izmanto LASĪTAVU lasīšanai
-7. LIETOTĀJS var mainīt METADATUS
-8. LIETOTĀJS var lejupielādēt TEKSTA FAILU
-9. LASĪTAVA nodod TEKSTA FAILU tālākai apstrādei TEKSTA MODULIM
-10. APSTRĀDĀTS DOKUMENTS tiek saglabāts IEBŪVĒTĀ DATUBĀZĒ
-11. TEKSTA MODULIS izmanto APSTRĀDĀTO DOKUMENTU teksta meklēšanai
-12. METADATI tiek saglabāti IEBŪVĒTĀ DATUBĀZĒ
+1. `TEKSTA MODULIS` apstrādā `TEKSTA FAILU` un izveido `APSTRĀDĀTO DOKUMENTU`
+2. `LASĪTAVA` pieprasa dokumentu `IEBŪVĒTĀ DATUBĀZĒ`;
+3. `IEBŪVĒTĀ DATUBĀZE` atgriež `APSTRĀDĀTO DOKUMENTU`, izmantojot `METADATUS`
+4. `LIETOTĀJS` izmanto `APSTRĀDĀTO DOKUMENTU` lasīšanai
+5. `TEKSTA MODULIS` saņem `METADATUS` no `TEKSTA FAILA`
+6. `LIETOTĀJS` izmanto `LASĪTAVU` lasīšanai
+7. `LIETOTĀJS` var mainīt `METADATUS`
+8. `LIETOTĀJS` var lejupielādēt `TEKSTA FAILU`
+9. `LASĪTAVA` nodod `TEKSTA FAILU` tālākai apstrādei `TEKSTA MODULIM`
+10. `APSTRĀDĀTS DOKUMENTS` tiek saglabāts `IEBŪVĒTĀ DATUBĀZĒ`
+11. `TEKSTA MODULIS` izmanto `APSTRĀDĀTO DOKUMENTU` teksta meklēšanai
+12. `METADATI` tiek saglabāti `IEBŪVĒTĀ DATUBĀZĒ`
 
 ## Datu vārdnīca
 
