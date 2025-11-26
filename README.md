@@ -11,7 +11,7 @@ Tīmekļa vietne, kurā lietotājs lejupielādē teksta failu no [letonika.lv](h
 
 ### Modeļa objektu saites
 1. `TEKSTA MODULIS` apstrādā `TEKSTA FAILU` un izveido `APSTRĀDĀTO DOKUMENTU`
-2. `LASĪTAVA` pieprasa dokumentu `IEBŪVĒTĀ DATUBĀZĒ`;
+2. `LASĪTAVA` pieprasa dokumentu `IEBŪVĒTĀ DATUBĀZĒ`
 3. `IEBŪVĒTĀ DATUBĀZE` atgriež `APSTRĀDĀTO DOKUMENTU`, izmantojot `METADATUS`
 4. `LIETOTĀJS` izmanto `APSTRĀDĀTO DOKUMENTU` lasīšanai
 5. `TEKSTA MODULIS` saņem `METADATUS` no `TEKSTA FAILA`
@@ -51,6 +51,7 @@ Tīmekļa vietne, kurā lietotājs lejupielādē teksta failu no [letonika.lv](h
 | Autors              | string | Var būt tukšs               |
 | Izveides laiks      | Date   | ISO 8601 standarts          |
 | Rediģēšanas laiks   | Date   | ISO 8601 standarts          |
+| Pēdējā pozīcija     | number | Lasīšanas pēdējā pozīcija   |
 
 ## Funkcionālās prasības
 1. Sistēma ļauj lietotājam augšupielādēt teksta failu no savas ierīces.
@@ -93,19 +94,26 @@ Pārlūkprogrammas, kuras atbalstīs sistēmu:
 
 ### Nefunkcionālās prasības 5 funkcijām
 * Teksta faila importēšana
-  * Maksimālais faila ielādes laiks: 3 sekundes
+  * Faila ielādes laiks: līdz 3 sekundēm
+  * Faila apstrādes laiks: līdz 3 sekundēm
   * Atbalstītais faila izmērs: līdz 15 MB
 
 * Dokumenta saglabāšana
+  * Oriģinālais teksta fails tiek dzēsts pēc apstrādes, lai samazinātu atmiņas patēriņu
   * Saglabāšanas laiks: līdz 1 sekundei
 
 * Dokumenta atvēršana
+  * Lietotājs var atsākt lasīšanu no pēdējās pozīcijas
   * Atvēršanas laiks: līdz 0.5 sekundēm
   * Navigācijai jāparādās automātiski
 
 * Teksta meklēšana
   * Rezultātu parādīšanas laiks: līdz 1 sekundei
   * Jāatbalsta vismaz 100,000 simbolu apjoms
+  * Meklēšanas funkcijai jāatbalsta reģistra jutība (case-sensitive) un reģistra nejutība (case-insensitive), kā arī diakritisko zīmju atšķirību ņemšana vērā
 
 * Dokumentu imports/eksports
+  * Sistēma atbalsta tikai `.md` faila formātu
+  * Sistēma pievieno galveni ar metadatiem eksportējamā `.md` failā un lasa to importējamā `.md` failā
   * Faila apstrādes laiks: līdz 3 sekundēm
+  * Sistēma paziņo lietotājam par kļūdām, ja tās ir radušas importēšanas/eksportēšanas laikā
