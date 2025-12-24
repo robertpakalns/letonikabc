@@ -1,9 +1,8 @@
-[package]
-name = "letonikabc"
-version = "0.1.0"
-authors = ["robertpakalns"]
-edition = "2024"
-description = "Tīmekļa vietne, kurā lietotājs lejupielādē teksta failu no letonika.lv vietnes un izmanto kā alternatīvu lasītāvu"
+[workspace]
+members = [
+  "crates/parser"
+]
+resolver = "2"
 
 [profile.release]
 panic = "abort"
@@ -11,8 +10,10 @@ codegen-units = 1
 lto = true
 opt-level = "s"
 strip = "symbols"
+debug = false
+debug-assertions = false
 
-[dependencies]
+[workspace.dependencies]
 wasm-bindgen = { version = "0.2.106", default-features = false }
 wasm-bindgen-futures = { version = "0.4.56", default-features = false } # This crate probably will not be required for the project
 web-sys = { version = "0.3.83", default-features = false } # Add required features in the future

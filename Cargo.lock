@@ -25,7 +25,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "letonikabc"
+name = "lbc_parser"
 version = "0.1.0"
 dependencies = [
  "wasm-bindgen",
