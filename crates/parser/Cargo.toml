@@ -1,5 +1,5 @@
 [package]
-name = "lbc_parser"
+name = "parser"
 version = "0.1.0"
 authors = ["robertpakalns"]
 edition = "2024"
