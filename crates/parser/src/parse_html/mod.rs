@@ -1,37 +1,74 @@
-use html5ever::tendril::StrTendril;
-use html5ever::tokenizer::{
-    BufferQueue, TagKind, Token, TokenSink, TokenSinkResult, Tokenizer, TokenizerOpts,
+use html5ever::{
+    local_name,
+    tendril::StrTendril,
+    tokenizer::{
+        BufferQueue, TagKind, Token, TokenSink, TokenSinkResult, Tokenizer, TokenizerOpts,
+    },
 };
+use std::cell::RefCell;
 
 use crate::console_log;
 
-struct Printer;
+struct ParserState {
+    stack: RefCell<Vec<String>>,
+    buffer: RefCell<String>,
+}
 
-impl TokenSink for Printer {
+pub struct Parser {
+    state: ParserState,
+}
+
+impl Parser {
+    pub fn new() -> Self {
+        Self {
+            state: ParserState {
+                stack: RefCell::new(Vec::new()),
+                buffer: RefCell::new(String::new()),
+            },
+        }
+    }
+}
+
+impl TokenSink for Parser {
     type Handle = ();
 
-    // For now, output results into console
     fn process_token(&self, token: Token, _line_number: u64) -> TokenSinkResult<Self::Handle> {
+        let span_local = local_name!("span");
+        let p_local = local_name!("p");
+
         match token {
             Token::TagToken(tag) => match tag.kind {
                 TagKind::StartTag => {
-                    console_log!("StartTag: <{}>", tag.name);
+                    self.state.stack.borrow_mut().push(tag.name.to_string());
+
+                    if tag.name == span_local {
+                        self.state.buffer.borrow_mut().push('[');
+                    }
                 }
                 TagKind::EndTag => {
-                    console_log!("EndTag: </{}>", tag.name);
+                    if tag.name == span_local {
+                        self.state.buffer.borrow_mut().push(']');
+                    }
+
+                    if tag.name == p_local {
+                        let text = self.state.buffer.borrow().trim().to_string();
+                        if !text.is_empty() {
+                            console_log!("{}", text);
+                        }
+                        self.state.buffer.borrow_mut().clear();
+                    }
+
+                    self.state.stack.borrow_mut().pop();
                 }
             },
             Token::CharacterTokens(chars) => {
-                let text = chars.trim();
-                if !text.is_empty() {
-                    console_log!("Text: {}", text);
+                if self.state.stack.borrow().contains(&"p".to_string()) {
+                    self.state.buffer.borrow_mut().push_str(&chars);
                 }
-            }
-            Token::CommentToken(comment) => {
-                console_log!("Comment: <!--{}-->", comment);
             }
             _ => {}
         }
+
         TokenSinkResult::Continue
     }
 }
@@ -40,7 +77,7 @@ pub fn parse(html: &str) {
     let mut input = BufferQueue::default();
     input.push_back(StrTendril::from(html));
 
-    let tokenizer = Tokenizer::new(Printer, TokenizerOpts::default());
+    let tokenizer = Tokenizer::new(Parser::new(), TokenizerOpts::default());
     let _ = tokenizer.feed(&mut input);
     tokenizer.end();
 }

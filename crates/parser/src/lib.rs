@@ -6,13 +6,8 @@ mod parse_html;
 #[wasm_bindgen]
 pub fn test() -> String {
     let html = r#"
-        <!-- wfrgrrg -->
-        <html>
-            <body>
-                <h1>biba</h1>
-                <p>boba</p>
-            </body>
-        </html>
+        <p>First paragraph</p>
+        <p><span class="person">Bob</span>: Second paragraph</p>
     "#;
 
     parse_html::parse(html);
