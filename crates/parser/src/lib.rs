@@ -8,10 +8,10 @@ pub fn test() -> String {
     let html = r#"
         <h1>:P</h1>
         <h2>:P</h2>
-        <h3>:P</h3>
-        <h4>:P</h4>
         <p>First paragraph</p>
         <p><span class="person">Bob</span>: Second paragraph</p>
+
+                                        <h1>:P</h1>
     "#;
 
     parse_html::parse(html);
