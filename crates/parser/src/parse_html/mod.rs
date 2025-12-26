@@ -5,12 +5,15 @@ use html5ever::{
         BufferQueue, TagKind, Token, TokenSink, TokenSinkResult, Tokenizer, TokenizerOpts,
     },
 };
-use std::cell::RefCell;
+use std::cell::{Cell, RefCell};
 
 use crate::console_log;
 
 struct ParserState {
-    stack: RefCell<Vec<String>>,
+    in_p: Cell<bool>,
+    // in_person: Cell<bool>,
+    // in_italic: Cell<bool>,
+    // after_person: Cell<bool>,
     buffer: RefCell<String>,
 }
 
@@ -22,7 +25,7 @@ impl Parser {
     pub fn new() -> Self {
         Self {
             state: ParserState {
-                stack: RefCell::new(Vec::new()),
+                in_p: Cell::new(false),
                 buffer: RefCell::new(String::new()),
             },
         }
@@ -39,14 +42,17 @@ impl TokenSink for Parser {
         match token {
             Token::TagToken(tag) => match tag.kind {
                 TagKind::StartTag => {
-                    self.state.stack.borrow_mut().push(tag.name.to_string());
+                    if tag.name == p_local {
+                        self.state.in_p.set(true);
+                    }
 
-                    if tag.name == span_local {
+                    if tag.name == span_local && self.state.in_p.get() {
                         self.state.buffer.borrow_mut().push('[');
                     }
                 }
+
                 TagKind::EndTag => {
-                    if tag.name == span_local {
+                    if tag.name == span_local && self.state.in_p.get() {
                         self.state.buffer.borrow_mut().push(']');
                     }
 
@@ -56,16 +62,17 @@ impl TokenSink for Parser {
                             console_log!("{}", text);
                         }
                         self.state.buffer.borrow_mut().clear();
+                        self.state.in_p.set(false);
                     }
-
-                    self.state.stack.borrow_mut().pop();
                 }
             },
+
             Token::CharacterTokens(chars) => {
-                if self.state.stack.borrow().contains(&"p".to_string()) {
+                if self.state.in_p.get() {
                     self.state.buffer.borrow_mut().push_str(&chars);
                 }
             }
+
             _ => {}
         }
 

@@ -5,7 +5,7 @@
   "description": "Tīmekļa vietne, kurā lietotājs lejupielādē teksta failu no letonika.lv vietnes un izmanto kā alternatīvu lasītāvu",
   "main": "index.js",
   "scripts": {
-    "dev": "wasm-pack build crates/parser --debug --target web&& vite",
+    "dev": "wasm-pack build crates/parser --debug --target web && vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
   },
