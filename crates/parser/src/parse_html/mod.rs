@@ -7,6 +7,8 @@ use html5ever::{
 };
 use std::cell::{Cell, RefCell};
 
+mod tests;
+
 struct ParserState {
     in_p: Cell<bool>,
     in_heading: Cell<Option<u8>>,
@@ -78,7 +80,12 @@ impl TokenSink for Parser {
                     }
                     n if n == br_local => {
                         if self.state.in_p.get() {
+                            let text = self.state.buffer.borrow().trim().to_string();
+                            if !text.is_empty() {
+                                self.state.markdown.borrow_mut().push_str(&text);
+                            }
                             self.state.markdown.borrow_mut().push('\n');
+                            self.state.buffer.borrow_mut().clear();
                             self.new_line();
                         }
                     }
