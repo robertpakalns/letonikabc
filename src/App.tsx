@@ -1,8 +1,15 @@
 import { FC } from "react";
-import { test } from "../crates/parser/pkg/parser";
+import { test, Output } from "../crates/parser/pkg/parser";
 
 const App: FC = () => {
-  return <div>{test()}</div>;
+  const data: Output = test();
+
+  return (
+    <div>
+      <div>{data.markdown}</div>
+      <div>{Array.from(data.header_lines).join(", ")}</div>
+    </div>
+  );
 };
 
 export default App;
