@@ -10,6 +10,10 @@ license-file = "../../LICENSE"
 [lib]
 crate-type = ["cdylib"]
 
+# Use wasm-opt separately via bun run opt
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
+
 [dependencies]
 html5ever = { workspace = true }
 wasm-bindgen = { workspace = true }

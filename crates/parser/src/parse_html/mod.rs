@@ -103,7 +103,7 @@ impl TokenSink for Parser {
                         let text = self.state.buffer.borrow().trim().to_string();
                         if !text.is_empty() {
                             self.state.markdown.borrow_mut().push_str(&text);
-                            self.state.markdown.borrow_mut().push_str("\n");
+                            self.state.markdown.borrow_mut().push('\n');
                         }
                         self.state.buffer.borrow_mut().clear();
                         self.state.in_p.set(false);
@@ -149,11 +149,11 @@ impl TokenSink for Parser {
 }
 
 pub fn parse(html: &str) -> (String, Vec<usize>) {
-    let mut input = BufferQueue::default();
+    let input = BufferQueue::default();
     input.push_back(StrTendril::from(html));
 
     let tokenizer = Tokenizer::new(Parser::new(), TokenizerOpts::default());
-    let _ = tokenizer.feed(&mut input);
+    let _ = tokenizer.feed(&input);
     tokenizer.end();
 
     tokenizer.sink.into_markdown()
