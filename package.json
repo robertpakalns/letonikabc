@@ -6,9 +6,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "wasm-pack build crates/parser --debug --target web && vite",
-    "build": "tsc -b && vite build",
+    "build": "bun run pack-wasm && vite build",
     "preview": "vite preview",
-    "test": "cargo test --target x86_64-pc-windows-msvc"
+    "opt": "wasm-opt -Oz crates/parser/pkg/parser_bg.wasm -o crates/parser/pkg/parser_bg.wasm --enable-bulk-memory --enable-nontrapping-float-to-int --strip-debug --strip-dwarf --strip-producers --strip-target-features",
+    "test": "cargo test --target x86_64-pc-windows-msvc",
+    "pack-wasm": "wasm-pack build crates/parser --release --target web && bun run opt"
   },
   "keywords": [
     "letonika",

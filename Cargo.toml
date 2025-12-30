@@ -15,8 +15,7 @@ debug-assertions = false
 
 [workspace.dependencies]
 wasm-bindgen = { version = "0.2.106", default-features = false }
-wasm-bindgen-futures = { version = "0.4.56", default-features = false } # This crate probably will not be required for the project
 web-sys = { version = "0.3.83", default-features = false, features = [
     "console"
-] } # Add required features in the future
-html5ever = "0.36.1"
+] }
+html5ever = { version = "0.36.1", default-features = false }
