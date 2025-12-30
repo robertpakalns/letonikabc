@@ -7,17 +7,16 @@ use html5ever::{
 };
 use std::cell::{Cell, RefCell};
 
-use crate::console_log;
-
 struct ParserState {
     in_p: Cell<bool>,
     in_heading: Cell<Option<u8>>,
     // in_person: Cell<bool>,
     // in_italic: Cell<bool>,
     // after_person: Cell<bool>,
-    header_count: Cell<usize>,
     buffer: RefCell<String>,
     current_line: Cell<usize>,
+    markdown: RefCell<String>,
+    header_lines: RefCell<Vec<usize>>,
 }
 
 pub struct Parser {
@@ -30,9 +29,10 @@ impl Parser {
             state: ParserState {
                 in_p: Cell::new(false),
                 in_heading: Cell::new(None),
-                header_count: Cell::new(0),
                 buffer: RefCell::new(String::new()),
                 current_line: Cell::new(0),
+                markdown: RefCell::new(String::new()),
+                header_lines: RefCell::new(Vec::new()),
             },
         }
     }
@@ -41,6 +41,13 @@ impl Parser {
         self.state
             .current_line
             .set(self.state.current_line.get() + 1);
+    }
+
+    pub fn into_markdown(self) -> (String, Vec<usize>) {
+        (
+            self.state.markdown.into_inner(),
+            self.state.header_lines.into_inner(),
+        )
     }
 }
 
@@ -71,6 +78,7 @@ impl TokenSink for Parser {
                     }
                     n if n == br_local => {
                         if self.state.in_p.get() {
+                            self.state.markdown.borrow_mut().push('\n');
                             self.new_line();
                         }
                     }
@@ -87,25 +95,25 @@ impl TokenSink for Parser {
                     n if n == p_local => {
                         let text = self.state.buffer.borrow().trim().to_string();
                         if !text.is_empty() {
-                            console_log!("{} | {}", self.state.current_line.get(), text);
+                            self.state.markdown.borrow_mut().push_str(&text);
+                            self.state.markdown.borrow_mut().push_str("\n");
                         }
                         self.state.buffer.borrow_mut().clear();
                         self.state.in_p.set(false);
                     }
-
                     n if n == h1_local || n == h2_local => {
                         if let Some(level) = self.state.in_heading.get() {
                             let text = self.state.buffer.borrow().trim().to_string();
                             if !text.is_empty() {
-                                let count = self.state.header_count.get() + 1;
-                                self.state.header_count.set(count);
-
-                                console_log!(
-                                    "{} | h{} | {}",
-                                    self.state.current_line.get(),
-                                    level,
-                                    text
-                                );
+                                let heading_prefix = "#".repeat(level as usize);
+                                self.state
+                                    .markdown
+                                    .borrow_mut()
+                                    .push_str(&format!("{heading_prefix} {text}\n"));
+                                self.state
+                                    .header_lines
+                                    .borrow_mut()
+                                    .push(self.state.current_line.get());
                             }
                         }
                         self.state.buffer.borrow_mut().clear();
@@ -133,11 +141,13 @@ impl TokenSink for Parser {
     }
 }
 
-pub fn parse(html: &str) {
+pub fn parse(html: &str) -> (String, Vec<usize>) {
     let mut input = BufferQueue::default();
     input.push_back(StrTendril::from(html));
 
     let tokenizer = Tokenizer::new(Parser::new(), TokenizerOpts::default());
     let _ = tokenizer.feed(&mut input);
     tokenizer.end();
+
+    tokenizer.sink.into_markdown()
 }
