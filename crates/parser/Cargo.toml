@@ -15,6 +15,5 @@ crate-type = ["cdylib"]
 wasm-opt = false
 
 [dependencies]
-html5ever = { workspace = true }
 wasm-bindgen = { workspace = true }
 web-sys = { workspace = true }

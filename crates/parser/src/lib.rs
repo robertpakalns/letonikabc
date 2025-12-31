@@ -30,7 +30,6 @@ impl Output {
     }
 }
 
-// html5ever IS A BLOATWARE; REPLACE IT
 #[wasm_bindgen]
 pub fn test() -> Output {
     let html = r#"

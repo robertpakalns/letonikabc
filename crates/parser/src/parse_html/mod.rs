@@ -1,160 +1,129 @@
-use html5ever::{
-    local_name,
-    tendril::StrTendril,
-    tokenizer::{
-        BufferQueue, TagKind, Token, TokenSink, TokenSinkResult, Tokenizer, TokenizerOpts,
-    },
-};
-use std::cell::{Cell, RefCell};
-
 mod tests;
 
-struct ParserState {
-    in_p: Cell<bool>,
-    in_heading: Cell<Option<u8>>,
-    // in_person: Cell<bool>,
-    // in_italic: Cell<bool>,
-    // after_person: Cell<bool>,
-    buffer: RefCell<String>,
-    current_line: Cell<usize>,
-    markdown: RefCell<String>,
-    header_lines: RefCell<Vec<usize>>,
+enum El {
+    Paragraph,
+    Heading(usize),
 }
 
-pub struct Parser {
-    state: ParserState,
-}
-
-impl Parser {
-    pub fn new() -> Self {
-        Self {
-            state: ParserState {
-                in_p: Cell::new(false),
-                in_heading: Cell::new(None),
-                buffer: RefCell::new(String::new()),
-                current_line: Cell::new(0),
-                markdown: RefCell::new(String::new()),
-                header_lines: RefCell::new(Vec::new()),
-            },
-        }
-    }
-
-    fn new_line(&self) {
-        self.state
-            .current_line
-            .set(self.state.current_line.get() + 1);
-    }
-
-    pub fn into_markdown(self) -> (String, Vec<usize>) {
-        (
-            self.state.markdown.into_inner(),
-            self.state.header_lines.into_inner(),
-        )
-    }
-}
-
-impl TokenSink for Parser {
-    type Handle = ();
-
-    fn process_token(&self, token: Token, _line_number: u64) -> TokenSinkResult<Self::Handle> {
-        let p_local = local_name!("p");
-        let h1_local = local_name!("h1");
-        let h2_local = local_name!("h2");
-        let br_local = local_name!("br");
-        let span_local = local_name!("span");
-
-        match token {
-            Token::TagToken(tag) => match tag.kind {
-                TagKind::StartTag => match tag.name {
-                    n if n == p_local => {
-                        self.state.in_p.set(true);
-                        self.new_line();
-                    }
-                    n if n == h1_local => {
-                        self.state.in_heading.set(Some(1));
-                        self.new_line();
-                    }
-                    n if n == h2_local => {
-                        self.state.in_heading.set(Some(2));
-                        self.new_line();
-                    }
-                    n if n == br_local => {
-                        if self.state.in_p.get() {
-                            let text = self.state.buffer.borrow().trim().to_string();
-                            if !text.is_empty() {
-                                self.state.markdown.borrow_mut().push_str(&text);
-                            }
-                            self.state.markdown.borrow_mut().push('\n');
-                            self.state.buffer.borrow_mut().clear();
-                            self.new_line();
-                        }
-                    }
-                    n if n == span_local => {
-                        if self.state.in_p.get() {
-                            self.state.buffer.borrow_mut().push('[');
-                        }
-                    }
-
-                    _ => {}
-                },
-
-                TagKind::EndTag => match tag.name {
-                    n if n == p_local => {
-                        let text = self.state.buffer.borrow().trim().to_string();
-                        if !text.is_empty() {
-                            self.state.markdown.borrow_mut().push_str(&text);
-                            self.state.markdown.borrow_mut().push('\n');
-                        }
-                        self.state.buffer.borrow_mut().clear();
-                        self.state.in_p.set(false);
-                    }
-                    n if n == h1_local || n == h2_local => {
-                        if let Some(level) = self.state.in_heading.get() {
-                            let text = self.state.buffer.borrow().trim().to_string();
-                            if !text.is_empty() {
-                                let heading_prefix = "#".repeat(level as usize);
-                                self.state
-                                    .markdown
-                                    .borrow_mut()
-                                    .push_str(&format!("{heading_prefix} {text}\n"));
-                                self.state
-                                    .header_lines
-                                    .borrow_mut()
-                                    .push(self.state.current_line.get());
-                            }
-                        }
-                        self.state.buffer.borrow_mut().clear();
-                        self.state.in_heading.set(None);
-                    }
-                    n if n == span_local => {
-                        if self.state.in_p.get() {
-                            self.state.buffer.borrow_mut().push(']');
-                        }
-                    }
-                    _ => {}
-                },
-            },
-
-            Token::CharacterTokens(chars) => {
-                if self.state.in_p.get() || self.state.in_heading.get().is_some() {
-                    self.state.buffer.borrow_mut().push_str(&chars);
+fn flush_buffer(
+    element_state: &mut Option<El>,
+    buffer: &mut String,
+    lines: &mut Vec<String>,
+    header_lines: &mut Vec<usize>,
+) {
+    if let Some(el) = element_state.take() {
+        let text = buffer.trim();
+        if !text.is_empty() {
+            match el {
+                El::Paragraph => lines.push(text.to_string()),
+                El::Heading(level) => {
+                    lines.push(format!("{} {}", "#".repeat(level), text));
+                    header_lines.push(lines.len());
                 }
             }
-
-            _ => {}
         }
-
-        TokenSinkResult::Continue
+        buffer.clear();
     }
 }
 
 pub fn parse(html: &str) -> (String, Vec<usize>) {
-    let input = BufferQueue::default();
-    input.push_back(StrTendril::from(html));
+    let mut chars = html.chars().peekable();
+    let mut buffer = String::new();
+    let mut lines = Vec::new();
+    let mut header_lines = Vec::new();
+    let mut element_state: Option<El> = None;
+    let mut span_depth = 0;
 
-    let tokenizer = Tokenizer::new(Parser::new(), TokenizerOpts::default());
-    let _ = tokenizer.feed(&input);
-    tokenizer.end();
+    while let Some(&ch) = chars.peek() {
+        if ch == '<' {
+            chars.next();
+            let mut tag_text = String::new();
+            while let Some(&c) = chars.peek() {
+                chars.next();
+                if c == '>' {
+                    break;
+                }
+                tag_text.push(c);
+            }
 
-    tokenizer.sink.into_markdown()
+            let tag = tag_text.trim();
+            let is_end = tag.starts_with('/');
+            let tag_name = tag
+                .trim_start_matches('/')
+                .split_whitespace()
+                .next()
+                .unwrap_or("")
+                .to_lowercase();
+
+            match (is_end, tag_name.as_str()) {
+                (true, "p" | "h1" | "h2") => flush_buffer(
+                    &mut element_state,
+                    &mut buffer,
+                    &mut lines,
+                    &mut header_lines,
+                ),
+                (true, "span") => {
+                    if span_depth > 0 {
+                        span_depth -= 1;
+                        buffer.push(']');
+                    }
+                }
+                (false, "p") => {
+                    flush_buffer(
+                        &mut element_state,
+                        &mut buffer,
+                        &mut lines,
+                        &mut header_lines,
+                    );
+                    element_state = Some(El::Paragraph);
+                }
+                (false, "h1") => {
+                    flush_buffer(
+                        &mut element_state,
+                        &mut buffer,
+                        &mut lines,
+                        &mut header_lines,
+                    );
+                    element_state = Some(El::Heading(1));
+                }
+                (false, "h2") => {
+                    flush_buffer(
+                        &mut element_state,
+                        &mut buffer,
+                        &mut lines,
+                        &mut header_lines,
+                    );
+                    element_state = Some(El::Heading(2));
+                }
+                (false, "br") => {
+                    if let Some(El::Paragraph) = element_state {
+                        let trimmed = buffer.trim();
+                        lines.push(trimmed.to_string());
+                        buffer.clear();
+                    }
+                }
+                (false, "span") => {
+                    if element_state.is_some() {
+                        span_depth += 1;
+                        buffer.push('[');
+                    }
+                }
+                _ => {}
+            }
+        } else if element_state.is_some() {
+            buffer.push(chars.next().unwrap());
+        } else {
+            chars.next();
+        }
+    }
+
+    flush_buffer(
+        &mut element_state,
+        &mut buffer,
+        &mut lines,
+        &mut header_lines,
+    );
+
+    let markdown = lines.join("\n");
+    (markdown, header_lines)
 }
