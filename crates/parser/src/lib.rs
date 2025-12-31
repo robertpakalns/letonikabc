@@ -1,7 +1,21 @@
+#![no_std]
+extern crate alloc;
+
+use alloc::{string::String, vec::Vec};
 use wasm_bindgen::prelude::wasm_bindgen;
+use wee_alloc::WeeAlloc;
 
 mod macros;
 mod parse_html;
+
+#[cfg(not(test))]
+#[panic_handler]
+fn panic(_info: &core::panic::PanicInfo) -> ! {
+    core::arch::wasm32::unreachable()
+}
+
+#[global_allocator]
+static ALLOC: WeeAlloc = WeeAlloc::INIT;
 
 #[wasm_bindgen]
 pub struct Output {

@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod tests {
     use super::super::parse;
+    use alloc::vec;
 
     #[test]
     fn simple_paragraph() {
