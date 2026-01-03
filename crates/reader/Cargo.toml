@@ -16,5 +16,3 @@ wasm-opt = false
 
 [dependencies]
 wasm-bindgen.workspace = true
-web-sys.workspace = true
-wee_alloc.workspace = true

@@ -16,10 +16,9 @@ wasm-opt = false
 
 [dependencies]
 # Crates
-parser = { path = "../parser" }
-reader = { path = "../reader" }
+parser.workspace = true
+reader.workspace = true
 
-
+# External
 wasm-bindgen.workspace = true
-web-sys.workspace = true
 wee_alloc.workspace = true

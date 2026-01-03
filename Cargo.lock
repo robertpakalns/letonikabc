@@ -9,7 +9,6 @@ dependencies = [
  "parser",
  "reader",
  "wasm-bindgen",
- "web-sys",
  "wee_alloc",
 ]
 
@@ -65,7 +64,6 @@ version = "0.1.0"
 dependencies = [
  "wasm-bindgen",
  "web-sys",
- "wee_alloc",
 ]
 
 [[package]]
@@ -91,8 +89,6 @@ name = "reader"
 version = "0.1.0"
 dependencies = [
  "wasm-bindgen",
- "web-sys",
- "wee_alloc",
 ]
 
 [[package]]

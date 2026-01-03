@@ -20,6 +20,7 @@ debug-assertions = false
 parser = { path = "crates/parser" }
 reader = { path = "crates/reader" }
 
+# External
 wasm-bindgen = { version = "0.2.106", default-features = false }
 web-sys = { version = "0.3.83", default-features = false, features = [
     "console"
