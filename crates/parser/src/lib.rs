@@ -3,31 +3,21 @@ extern crate alloc;
 
 use alloc::{string::String, vec::Vec};
 use wasm_bindgen::prelude::wasm_bindgen;
-use wee_alloc::WeeAlloc;
 
 mod macros;
 mod parse_html;
 
-#[cfg(not(test))]
-#[panic_handler]
-fn panic(_info: &core::panic::PanicInfo) -> ! {
-    core::arch::wasm32::unreachable()
-}
-
-#[global_allocator]
-static ALLOC: WeeAlloc = WeeAlloc::INIT;
-
 #[wasm_bindgen]
-pub struct Output {
+pub struct ParseOutput {
     markdown: String,
     header_lines: Vec<usize>,
 }
 
 #[wasm_bindgen]
-impl Output {
+impl ParseOutput {
     #[wasm_bindgen(constructor)]
-    pub fn new(markdown: String, header_lines: Vec<usize>) -> Output {
-        Output {
+    pub fn new(markdown: String, header_lines: Vec<usize>) -> ParseOutput {
+        ParseOutput {
             markdown,
             header_lines,
         }
@@ -44,9 +34,8 @@ impl Output {
     }
 }
 
-#[wasm_bindgen]
-pub fn parse(html: String) -> Output {
+pub fn parse(html: String) -> ParseOutput {
     let (markdown, header_lines) = parse_html::parse(&html);
 
-    Output::new(markdown, header_lines)
+    ParseOutput::new(markdown, header_lines)
 }

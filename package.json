@@ -5,13 +5,13 @@
   "description": "Tīmekļa vietne, kurā lietotājs lejupielādē teksta failu no letonika.lv vietnes un izmanto kā alternatīvu lasītāvu",
   "main": "index.js",
   "scripts": {
-    "dev": "wasm-pack build crates/parser --debug --target web && vite",
+    "dev": "wasm-pack build crates/app --debug --target web && vite",
     "build": "bun run pack-wasm && vite build",
     "preview": "bun run build && vite preview",
-    "extract": "bun run build && wasm2wat crates/parser/pkg/parser_bg.wasm -o crates/parser/pkg/release.wat",
-    "opt": "wasm-opt -Oz crates/parser/pkg/parser_bg.wasm -o crates/parser/pkg/parser_bg.wasm --enable-bulk-memory --enable-nontrapping-float-to-int --strip-debug --strip-dwarf --strip-producers --strip-target-features",
+    "extract": "bun run build && wasm2wat crates/app/pkg/app_bg.wasm -o crates/app/pkg/release.wat",
+    "opt": "wasm-opt -Oz crates/app/pkg/app_bg.wasm -o crates/app/pkg/app_bg.wasm --enable-bulk-memory --enable-nontrapping-float-to-int --strip-debug --strip-dwarf --strip-producers --strip-target-features",
     "test": "cargo test --target x86_64-pc-windows-msvc",
-    "pack-wasm": "wasm-pack build crates/parser --release --target web && bun run opt"
+    "pack-wasm": "wasm-pack build crates/app --release --target web && bun run opt"
   },
   "keywords": [
     "letonika",

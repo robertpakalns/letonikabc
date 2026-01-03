@@ -1,20 +1,25 @@
 [package]
-name = "parser"
+name = "app"
 version = "0.1.0"
 authors = ["robertpakalns"]
 edition = "2024"
-description = "HTML to Markdown parser, designed for working with letonika.lv resources"
+description = "Letonika Better Client main entry"
 repository = "https://github.com/robertpakalns/letonikabc"
 license-file = "../../LICENSE"
 
 [lib]
-crate-type = ["lib"]
+crate-type = ["cdylib"]
 
 # Use wasm-opt separately via bun run opt
 [package.metadata.wasm-pack.profile.release]
 wasm-opt = false
 
 [dependencies]
+# Crates
+parser = { path = "../parser" }
+reader = { path = "../reader" }
+
+
 wasm-bindgen.workspace = true
 web-sys.workspace = true
 wee_alloc.workspace = true

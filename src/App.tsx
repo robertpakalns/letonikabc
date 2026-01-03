@@ -1,8 +1,8 @@
-import { parse, Output } from "../crates/parser/pkg/parser";
+import { parse_html_to_markdown, ParseOutput } from "../crates/app/pkg/app";
 import { FC, useState, ChangeEvent } from "react";
 
 const App: FC = () => {
-  const [data, setData] = useState<Output | null>(null);
+  const [data, setData] = useState<ParseOutput | null>(null);
 
   const handleFileChange = async (
     e: ChangeEvent<HTMLInputElement>,
@@ -12,7 +12,7 @@ const App: FC = () => {
 
     const text = await file.text();
 
-    const parsedData: Output = parse(text);
+    const parsedData: ParseOutput = parse_html_to_markdown(text);
     setData(parsedData);
   };
 

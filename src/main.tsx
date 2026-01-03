@@ -1,5 +1,5 @@
-import init from "../crates/parser/pkg/parser";
 import { createRoot } from "react-dom/client";
+import init from "../crates/app/pkg/app";
 import App from "./App";
 
 const bootstrap = async (): Promise<void> => {

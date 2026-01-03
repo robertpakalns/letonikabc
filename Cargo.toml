@@ -1,6 +1,8 @@
 [workspace]
 members = [
-  "crates/parser"
+  "crates/app",
+  "crates/parser",
+  "crates/reader",
 ]
 resolver = "2"
 
@@ -14,6 +16,10 @@ debug = false
 debug-assertions = false
 
 [workspace.dependencies]
+# Crates
+parser = { path = "crates/parser" }
+reader = { path = "crates/reader" }
+
 wasm-bindgen = { version = "0.2.106", default-features = false }
 web-sys = { version = "0.3.83", default-features = false, features = [
     "console"
