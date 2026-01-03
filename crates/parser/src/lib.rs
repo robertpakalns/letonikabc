@@ -45,17 +45,8 @@ impl Output {
 }
 
 #[wasm_bindgen]
-pub fn test() -> Output {
-    let html = r#"
-        <h1>:P</h1>
-        <h2>:P</h2>
-        <p>First paragraph</p>
-        <p><span class="person">Bob</span>: Second paragraph</p>
-
-                                        <h1>:P</h1>
-    "#;
-
-    let (markdown, header_lines) = parse_html::parse(html);
+pub fn parse(html: String) -> Output {
+    let (markdown, header_lines) = parse_html::parse(&html);
 
     Output::new(markdown, header_lines)
 }

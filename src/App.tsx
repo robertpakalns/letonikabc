@@ -1,14 +1,32 @@
-import { FC } from "react";
-import { test, Output } from "../crates/parser/pkg/parser";
+import { parse, Output } from "../crates/parser/pkg/parser";
+import { FC, useState, ChangeEvent } from "react";
 
 const App: FC = () => {
-  const data: Output = test();
+  const [data, setData] = useState<Output | null>(null);
+
+  const handleFileChange = async (
+    e: ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const text = await file.text();
+
+    const parsedData: Output = parse(text);
+    setData(parsedData);
+  };
 
   return (
-    <div>
-      <div>{data.markdown}</div>
-      <div>{Array.from(data.header_lines).join(", ")}</div>
-    </div>
+    <>
+      <input type="file" accept=".html" onChange={handleFileChange} />
+
+      {data && (
+        <div>
+          <div>{data.markdown}</div>
+          <div>{Array.from(data.header_lines).join(", ")}</div>
+        </div>
+      )}
+    </>
   );
 };
 
