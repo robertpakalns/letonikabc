@@ -7,6 +7,12 @@ members = [
 ]
 resolver = "2"
 
+[workspace.package]
+authors = ["robertpakalns"]
+edition = "2024"
+license-file = "LICENSE"
+repository = "https://github.com/robertpakalns/letonikabc"
+
 [profile.release]
 panic = "abort"
 codegen-units = 1

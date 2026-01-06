@@ -1,11 +1,11 @@
 [package]
 name = "parser"
 version = "0.1.0"
-authors = ["robertpakalns"]
-edition = "2024"
+authors.workspace = true
+edition.workspace = true
 description = "HTML to Markdown parser, designed for working with letonika.lv resources"
-repository = "https://github.com/robertpakalns/letonikabc"
-license-file = "../../LICENSE"
+repository.workspace = true
+license-file.workspace = true
 
 [lib]
 crate-type = ["lib"]

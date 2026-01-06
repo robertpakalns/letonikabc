@@ -1,11 +1,11 @@
 [package]
 name = "utils"
 version = "0.1.0"
-authors = ["robertpakalns"]
-edition = "2024"
+authors.workspace = true
+edition.workspace = true
 description = "Utilities for the parser and reader crates"
-repository = "https://github.com/robertpakalns/letonikabc"
-license-file = "../../LICENSE"
+repository.workspace = true
+license-file.workspace = true
 
 [lib]
 crate-type = ["lib"]
