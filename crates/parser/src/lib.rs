@@ -4,7 +4,6 @@ extern crate alloc;
 use alloc::{string::String, vec::Vec};
 use wasm_bindgen::prelude::wasm_bindgen;
 
-mod macros;
 mod parse_html;
 
 #[wasm_bindgen]

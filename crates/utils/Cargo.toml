@@ -1,9 +1,9 @@
 [package]
-name = "parser"
+name = "utils"
 version = "0.1.0"
 authors = ["robertpakalns"]
 edition = "2024"
-description = "HTML to Markdown parser, designed for working with letonika.lv resources"
+description = "Utilities for the parser and reader crates"
 repository = "https://github.com/robertpakalns/letonikabc"
 license-file = "../../LICENSE"
 
@@ -11,6 +11,4 @@ license-file = "../../LICENSE"
 crate-type = ["lib"]
 
 [dependencies]
-wasm-bindgen.workspace = true
-
-utils.workspace = true
+web-sys.workspace = true

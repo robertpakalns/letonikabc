@@ -10,9 +10,5 @@ license-file = "../../LICENSE"
 [lib]
 crate-type = ["lib"]
 
-# Use wasm-opt separately via bun run opt
-[package.metadata.wasm-pack.profile.release]
-wasm-opt = false
-
 [dependencies]
-wasm-bindgen.workspace = true
+utils.workspace = true

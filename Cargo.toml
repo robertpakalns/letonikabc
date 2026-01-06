@@ -3,6 +3,7 @@ members = [
   "crates/app",
   "crates/parser",
   "crates/reader",
+  "crates/utils",
 ]
 resolver = "2"
 
@@ -19,6 +20,7 @@ debug-assertions = false
 # Crates
 parser = { path = "crates/parser" }
 reader = { path = "crates/reader" }
+utils = { path = "crates/utils" }
 
 # External
 wasm-bindgen = { version = "0.2.106", default-features = false }
