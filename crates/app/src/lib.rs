@@ -40,16 +40,6 @@ pub struct ParseOutput {
 
 #[wasm_bindgen]
 impl ParseOutput {
-    #[wasm_bindgen(constructor)]
-    pub fn new(markdown: String, header_lines: Vec<usize>) -> Self {
-        Self {
-            inner: ParseOut {
-                markdown,
-                header_lines,
-            },
-        }
-    }
-
     #[wasm_bindgen(getter)]
     pub fn markdown(&self) -> String {
         self.inner.markdown.clone()
