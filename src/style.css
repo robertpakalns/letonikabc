@@ -1,0 +1,28 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body,
+#app {
+    width: 100vw;
+    height: 100vh;
+}
+
+h1,
+h2 {
+    margin: 20px 0;
+    font-style: italic;
+    text-decoration: underline;
+}
+
+span {
+    color: #6ab2ff;
+    font-weight: 600;
+}
+
+p {
+    margin: 3px;
+    font-size: 1.05rem;
+}

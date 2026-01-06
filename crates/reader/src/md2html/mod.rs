@@ -48,10 +48,8 @@ fn flush_buffer(
         if !text.is_empty() {
             match el {
                 El::Paragraph => {
-                    // \n -> <br>
-                    let text_with_br = text.replace('\n', "<br>");
                     // Wrap [content] in <span>
-                    let text_with_span = wrap_spans(&text_with_br);
+                    let text_with_span = wrap_spans(text);
                     lines.push(format!("<p>{}</p>", text_with_span));
                 }
                 El::Heading(level) => {
@@ -72,9 +70,20 @@ pub fn convert(md: &str) -> String {
     let mut header_lines = Vec::new();
 
     for line in md.lines() {
-        let trimmed = line.trim_start();
+        let trimmed = line.trim();
 
-        // Count #
+        if trimmed.is_empty() {
+            // Empty line → flush current paragraph
+            flush_buffer(
+                &mut element_state,
+                &mut buffer,
+                &mut lines,
+                &mut header_lines,
+            );
+            continue;
+        }
+
+        // Heading check
         let mut count = 0;
         for c in trimmed.chars() {
             if c == '#' {
@@ -91,26 +100,21 @@ pub fn convert(md: &str) -> String {
                 &mut lines,
                 &mut header_lines,
             );
-            let level = if count > 6 { 6 } else { count };
+            let level = count.min(6);
             element_state = Some(El::Heading(level));
             buffer.push_str(&trimmed[count + 1..]);
-        } else {
-            if element_state.is_none() {
-                element_state = Some(El::Paragraph);
-            } else if matches!(element_state, Some(El::Heading(_))) {
-                flush_buffer(
-                    &mut element_state,
-                    &mut buffer,
-                    &mut lines,
-                    &mut header_lines,
-                );
-                element_state = Some(El::Paragraph);
-            }
-            if !buffer.is_empty() {
-                buffer.push('\n');
-            }
-            buffer.push_str(trimmed);
+            continue;
         }
+
+        // Normal paragraph
+        flush_buffer(
+            &mut element_state,
+            &mut buffer,
+            &mut lines,
+            &mut header_lines,
+        );
+        element_state = Some(El::Paragraph);
+        buffer.push_str(trimmed);
     }
 
     flush_buffer(

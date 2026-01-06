@@ -24,13 +24,6 @@ mod tests {
     }
 
     #[test]
-    fn multiline_paragraph() {
-        let md = "This is a paragraph\nthat spans multiple lines.";
-        let expected = "<p>This is a paragraph<br>that spans multiple lines.</p>";
-        assert_eq!(convert(md), expected);
-    }
-
-    #[test]
     fn span_inside_paragraph() {
         let md = "This is a [span] inside a paragraph.";
         let expected = "<p>This is a <span>[span]</span> inside a paragraph.</p>";
@@ -40,7 +33,7 @@ mod tests {
     #[test]
     fn multiline_paragraph_with_span() {
         let md = "Line one with [span]\nLine two continues.";
-        let expected = "<p>Line one with <span>[span]</span><br>Line two continues.</p>";
+        let expected = "<p>Line one with <span>[span]</span></p><p>Line two continues.</p>";
         assert_eq!(convert(md), expected);
     }
 
@@ -63,6 +56,13 @@ mod tests {
     fn unclosed_bracket() {
         let md = "This is [not closed span";
         let expected = "<p>This is [not closed span</p>";
+        assert_eq!(convert(md), expected);
+    }
+
+    #[test]
+    fn multiple_lines() {
+        let md = "Line 1\nLine 2\nLine 3";
+        let expected = "<p>Line 1</p><p>Line 2</p><p>Line 3</p>";
         assert_eq!(convert(md), expected);
     }
 }
