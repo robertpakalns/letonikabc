@@ -4,12 +4,9 @@ use alloc::{
     vec::Vec,
 };
 
-mod tests;
+use utils::El;
 
-enum El {
-    Paragraph,
-    Heading(usize),
-}
+mod tests;
 
 fn flush_buffer(
     element_state: &mut Option<El>,

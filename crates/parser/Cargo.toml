@@ -11,6 +11,4 @@ license-file.workspace = true
 crate-type = ["lib"]
 
 [dependencies]
-wasm-bindgen.workspace = true
-
 utils.workspace = true
