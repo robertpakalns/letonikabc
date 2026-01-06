@@ -6,5 +6,13 @@ export default defineConfig({
   build: {
     target: "esnext",
     sourcemap: false,
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        passes: 7,
+      },
+      mangle: true,
+    },
+    polyfillModulePreload: false,
   },
 });
