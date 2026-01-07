@@ -86,10 +86,10 @@ mod tests {
 
     #[test]
     fn paragraph_with_extra_whitespace() {
-        let html = "<p>   Text with    spaces   </p>";
+        let html = "<p>   Text with  no     big  spaces   </p>";
         let (md, headers) = parse(html);
 
-        assert_eq!(md, "Text with    spaces");
+        assert_eq!(md, "Text with no big spaces");
         assert!(headers.is_empty());
     }
 
