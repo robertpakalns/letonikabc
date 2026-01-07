@@ -37,6 +37,7 @@ pub fn parse(html: &str) -> (String, Vec<usize>) {
     let mut element_state: Option<El> = None;
     let mut span_depth = 0;
     let mut italic_depth = 0;
+    let mut is_person_span = false;
 
     while let Some(&ch) = chars.peek() {
         if ch == '<' {
@@ -69,7 +70,12 @@ pub fn parse(html: &str) -> (String, Vec<usize>) {
                 (true, "span") => {
                     if span_depth > 0 {
                         span_depth -= 1;
-                        buffer.push(']');
+                        if is_person_span {
+                            buffer.push(']');
+                            is_person_span = false;
+                        } else {
+                            buffer.push(']');
+                        }
                     }
                 }
                 (true, "i") => {
@@ -115,7 +121,13 @@ pub fn parse(html: &str) -> (String, Vec<usize>) {
                 (false, "span") => {
                     if element_state.is_some() {
                         span_depth += 1;
-                        buffer.push('[');
+
+                        if tag.contains("class=\"person\"") {
+                            buffer.push_str("@[");
+                            is_person_span = true;
+                        } else {
+                            buffer.push('[');
+                        }
                     }
                 }
                 (false, "i") => {
@@ -127,7 +139,17 @@ pub fn parse(html: &str) -> (String, Vec<usize>) {
                 _ => {}
             }
         } else if element_state.is_some() {
-            buffer.push(chars.next().unwrap());
+            let ch = chars.next().unwrap();
+
+            if ch.is_whitespace() {
+                // Prevent newlines/indentation from creating line breaks
+                // Collapse all whitespace runs into a single space
+                if !buffer.ends_with(' ') {
+                    buffer.push(' ');
+                }
+            } else {
+                buffer.push(ch);
+            }
         } else {
             chars.next();
         }

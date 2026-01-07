@@ -15,6 +15,8 @@
         const text: string = await file.text();
         const mdData: ParseOutput = parse_html_to_markdown(text);
 
+        console.log(mdData.markdown);
+
         content = convert_parsed_markdown_to_html(mdData.markdown);
     };
 </script>

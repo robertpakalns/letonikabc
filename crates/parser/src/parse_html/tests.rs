@@ -129,4 +129,47 @@ mod tests {
         assert_eq!(md, "This is _italic_ text and _more italics_.");
         assert!(headers.is_empty());
     }
+
+    #[test]
+    fn person_span_simple() {
+        let html = r#"<p><span class="person">TRAI</span>: Hello.</p>"#;
+        let (md, headers) = parse(html);
+
+        assert_eq!(md.trim(), "@[TRAI]: Hello.");
+        assert!(headers.is_empty());
+    }
+
+    #[test]
+    fn multiple_person_spans() {
+        let html = r#"
+            <p><span class="person">PERSON1</span>: First line.</p>
+            <p><span class="person">PERSON2</span>: Second line.</p>
+        "#;
+
+        let (md, headers) = parse(html);
+
+        assert_eq!(
+            md.trim(),
+            "@[PERSON1]: First line.\n@[PERSON2]: Second line."
+        );
+        assert!(headers.is_empty());
+    }
+
+    #[test]
+    fn mixed_person_and_regular_span() {
+        let html = r#"<p><span class="person">PERSON1</span> meets <span>someone</span>.</p>"#;
+
+        let (md, headers) = parse(html);
+        assert_eq!(md.trim(), "@[PERSON1] meets [someone].");
+        assert!(headers.is_empty());
+    }
+
+    #[test]
+    fn nested_person_span() {
+        let html = r#"<p><span class="person">PERSON1 <span>Inner</span></span></p>"#;
+
+        let (md, headers) = parse(html);
+        assert_eq!(md.trim(), "@[PERSON1 [Inner]]");
+        assert!(headers.is_empty());
+    }
 }

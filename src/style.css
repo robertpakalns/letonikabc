@@ -17,7 +17,7 @@ h2 {
     text-decoration: underline;
 }
 
-span {
+[data-p] {
     color: #6ab2ff;
     font-weight: 600;
 }
@@ -25,4 +25,8 @@ span {
 p {
     margin: 3px;
     font-size: 1.05rem;
+}
+
+i {
+    font-weight: 300;
 }

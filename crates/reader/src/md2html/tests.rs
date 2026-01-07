@@ -133,4 +133,42 @@ mod tests {
         let expected = "<p>Empty <i> </i> italics</p>";
         assert_eq!(html, expected);
     }
+
+    #[test]
+    fn person_span_simple() {
+        let md = "@[PERSON1]: Hello.";
+        let html = convert(md);
+
+        assert_eq!(html, "<p><span data-p>PERSON1</span>: Hello.</p>");
+    }
+
+    #[test]
+    fn multiple_person_spans() {
+        let md = "@[PERSON1]: First.\n@[PERSON2]: Second.";
+        let html = convert(md);
+
+        assert_eq!(
+            html,
+            "<p><span data-p>PERSON1</span>: First.</p><p><span data-p>PERSON2</span>: Second.</p>"
+        );
+    }
+
+    #[test]
+    fn person_and_regular_span() {
+        let md = "@[PERSON1] meets [someone].";
+        let html = convert(md);
+
+        assert_eq!(
+            html,
+            "<p><span data-p>PERSON1</span> meets <span>[someone]</span>.</p>"
+        );
+    }
+
+    #[test]
+    fn person_span_with_italics() {
+        let md = "_@[PERSON1]_ speaks.";
+        let html = convert(md);
+
+        assert_eq!(html, "<p><i><span data-p>PERSON1</span></i> speaks.</p>");
+    }
 }

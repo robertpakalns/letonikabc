@@ -9,7 +9,15 @@ fn wrap_spans(text: &str) -> String {
     let mut chars = text.chars().peekable();
 
     while let Some(c) = chars.next() {
-        if c == '[' {
+        if c == '[' || (c == '@' && chars.peek() == Some(&'[')) {
+            // @ char before square brackets = person
+            let is_person = if c == '@' {
+                chars.next();
+                true
+            } else {
+                false
+            };
+
             let mut span_content = String::new();
             let mut found_close = false;
 
@@ -24,9 +32,17 @@ fn wrap_spans(text: &str) -> String {
             }
 
             if found_close {
-                result.push_str(&format!("<span>[{}]</span>", span_content));
+                if is_person {
+                    result.push_str(&format!("<span data-p>{}</span>", span_content));
+                } else {
+                    result.push_str(&format!("<span>[{}]</span>", span_content));
+                }
             } else {
-                result.push('[');
+                if is_person {
+                    result.push_str("@[");
+                } else {
+                    result.push('[');
+                }
                 result.push_str(&span_content);
             }
         } else {
