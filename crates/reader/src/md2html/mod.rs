@@ -37,6 +37,32 @@ fn wrap_spans(text: &str) -> String {
     result
 }
 
+fn wrap_italics(text: &str) -> String {
+    let mut result = String::new();
+    let mut chars = text.chars().peekable();
+    let mut in_italic = false;
+
+    while let Some(c) = chars.next() {
+        if c == '_' {
+            if in_italic {
+                result.push_str("</i>");
+                in_italic = false;
+            } else {
+                result.push_str("<i>");
+                in_italic = true;
+            }
+        } else {
+            result.push(c);
+        }
+    }
+
+    if in_italic {
+        result.push_str("</i>");
+    }
+
+    result
+}
+
 fn flush_buffer(
     element_state: &mut Option<El>,
     buffer: &mut String,
@@ -46,11 +72,12 @@ fn flush_buffer(
     if let Some(el) = element_state.take() {
         let text = buffer.trim();
         if !text.is_empty() {
+            let text = wrap_spans(text);
+            let text = wrap_italics(&text);
+
             match el {
                 El::Paragraph => {
-                    // Wrap [content] in <span>
-                    let text_with_span = wrap_spans(text);
-                    lines.push(format!("<p>{}</p>", text_with_span));
+                    lines.push(format!("<p>{}</p>", text));
                 }
                 El::Heading(level) => {
                     lines.push(format!("<h{level}>{}</h{level}>", text));
@@ -73,7 +100,7 @@ pub fn convert(md: &str) -> String {
         let trimmed = line.trim();
 
         if trimmed.is_empty() {
-            // Empty line → flush current paragraph
+            // Flush current paragraph
             flush_buffer(
                 &mut element_state,
                 &mut buffer,

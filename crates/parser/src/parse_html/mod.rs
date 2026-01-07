@@ -36,6 +36,7 @@ pub fn parse(html: &str) -> (String, Vec<usize>) {
     let mut header_lines = Vec::new();
     let mut element_state: Option<El> = None;
     let mut span_depth = 0;
+    let mut italic_depth = 0;
 
     while let Some(&ch) = chars.peek() {
         if ch == '<' {
@@ -69,6 +70,12 @@ pub fn parse(html: &str) -> (String, Vec<usize>) {
                     if span_depth > 0 {
                         span_depth -= 1;
                         buffer.push(']');
+                    }
+                }
+                (true, "i") => {
+                    if italic_depth > 0 {
+                        italic_depth -= 1;
+                        buffer.push('_');
                     }
                 }
                 (false, "p") => {
@@ -109,6 +116,12 @@ pub fn parse(html: &str) -> (String, Vec<usize>) {
                     if element_state.is_some() {
                         span_depth += 1;
                         buffer.push('[');
+                    }
+                }
+                (false, "i") => {
+                    if element_state.is_some() {
+                        italic_depth += 1;
+                        buffer.push('_');
                     }
                 }
                 _ => {}
