@@ -1,9 +1,21 @@
 <script lang="ts">
+    import Menu from "./components/Menu/Menu.svelte";
     import Reader from "./components/Reader.svelte";
+
+    type State = "menu" | "reader";
+    let state: State = "menu";
+
+    const changeState = (s: State) => {
+        state = s;
+    };
 </script>
 
 <div class="globalWrapper">
-    <Reader />
+    {#if state === "menu"}
+        <Menu openReader={() => changeState("reader")} />
+    {:else}
+        <Reader goBack={() => changeState("menu")} />
+    {/if}
 </div>
 
 <style>

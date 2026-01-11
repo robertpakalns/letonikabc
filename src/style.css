@@ -1,6 +1,8 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: Roboto, sans-serif;
+    color: white; /* Dark mode for now */
 }
 
 html,
@@ -10,23 +12,46 @@ body,
     height: 100vh;
 }
 
-h1,
-h2 {
-    margin: 20px 0;
-    font-style: italic;
-    text-decoration: underline;
+/* Intentionally use HTML elements without classes to not bloat generated HTML */
+.reader {
+    h1,
+    h2 {
+        margin: 20px 0;
+        font-style: italic;
+        text-decoration: underline;
+    }
+
+    [data-p] {
+        color: #6ab2ff;
+        font-weight: 600;
+    }
+
+    p {
+        margin: 1rem 0;
+        font-size: 1.05rem;
+    }
+
+    i {
+        font-weight: 300;
+    }
 }
 
-[data-p] {
-    color: #6ab2ff;
-    font-weight: 600;
+.btn {
+    padding: 6px 10px;
+    border-radius: 8px;
+    outline: none;
+    border: 1px solid #7a7a7a;
+    background: #575757;
+    cursor: pointer;
+    transition: 0.3s ease;
+    font-size: 1rem;
+
+    &:hover {
+        transform: scale(1.1);
+    }
 }
 
-p {
-    margin: 3px;
-    font-size: 1.05rem;
-}
-
-i {
-    font-weight: 300;
+a {
+    text-decoration: none;
+    color: #cab95d;
 }

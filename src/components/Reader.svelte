@@ -5,7 +5,9 @@
         convert_parsed_markdown_to_html,
     } from "../../crates/app/pkg/app";
 
-    let content: string = "";
+    let { goBack } = $props();
+
+    let content = $state<string>("");
 
     const handleFileChange = async (event: Event): Promise<void> => {
         const input = event.target as HTMLInputElement;
@@ -15,13 +17,14 @@
         const text: string = await file.text();
         const mdData: ParseOutput = parse_html_to_markdown(text);
 
-        console.log(mdData.markdown);
-
         content = convert_parsed_markdown_to_html(mdData.markdown);
     };
 </script>
 
-<input type="file" accept=".html" on:change={handleFileChange} />
+<div>
+    <input type="file" accept=".html" onchange={handleFileChange} />
+    <button class="btn" onclick={goBack}>Back</button>
+</div>
 
 <!-- Insert raw HTML -->
 <div class="reader">{@html content}</div>
@@ -30,7 +33,6 @@
     .reader {
         max-width: 800px;
         margin: 20px auto;
-        font-family: Roboto, sans-serif;
         line-height: 1.3rem;
     }
 </style>
