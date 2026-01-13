@@ -15,7 +15,9 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
 
-        # Install Binaryen
+      - run: rustup target add wasm32-unknown-unknown
+
+      # Install Binaryen
       - run: |
           v=125
           wget https://github.com/WebAssembly/binaryen/releases/download/version_${v}/binaryen-version_${v}-x86_64-linux.tar.gz
