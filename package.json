@@ -5,9 +5,9 @@
   "description": "Tīmekļa vietne, kurā lietotājs lejupielādē teksta failu no letonika.lv vietnes un izmanto kā alternatīvu lasītāvu",
   "main": "index.js",
   "scripts": {
-    "dev": "wasm-pack build crates/app --debug --target web && vite",
-    "build": "bun run pack-wasm && vite build",
-    "preview": "bun run build && vite preview",
+    "dev": "wasm-pack build crates/app --debug --target web && bun vite",
+    "build": "bun run pack-wasm && bun vite build",
+    "preview": "bun run build && bun vite preview",
     "extract": "bun run build && wasm2wat crates/app/pkg/app_bg.wasm -o crates/app/pkg/release.wat",
     "opt": "wasm-opt -Oz crates/app/pkg/app_bg.wasm -o crates/app/pkg/app_bg.wasm --enable-bulk-memory --enable-nontrapping-float-to-int --strip-debug --strip-dwarf --strip-producers --strip-target-features",
     "test": "cargo test --target x86_64-pc-windows-msvc",
