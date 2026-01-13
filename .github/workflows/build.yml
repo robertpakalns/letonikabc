@@ -27,9 +27,9 @@ jobs:
       # Install wasm-bindgen CLI
       - run: |
           v=0.2.106
-          wget https://github.com/rustwasm/wasm-bindgen/releases/download/v${v}/wasm-bindgen-v${v}-x86_64-unknown-linux-musl.tar.gz
-          tar -xzf wasm-bindgen-v${v}-x86_64-unknown-linux-musl.tar.gz
-          echo "$PWD/wasm-bindgen-v${v}-x86_64-unknown-linux-musl" >> $GITHUB_PATH
+          wget https://github.com/wasm-bindgen/wasm-bindgen/releases/download/${v}/wasm-bindgen-${v}-x86_64-unknown-linux-musl.tar.gz
+          tar -xzf wasm-bindgen-${v}-x86_64-unknown-linux-musl.tar.gz
+          echo "$PWD/wasm-bindgen-${v}-x86_64-unknown-linux-musl" >> $GITHUB_PATH
 
       - run: bun install
       - run: bun run build
