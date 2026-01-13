@@ -12,6 +12,16 @@ jobs:
         with:
           bun-version: latest
 
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+
+        # Install Binaryen
+      - run: |
+          v=125
+          wget https://github.com/WebAssembly/binaryen/releases/download/version_${v}/binaryen-version_${v}-x86_64-linux.tar.gz
+          tar -xzf binaryen-version_${v}-x86_64-linux.tar.gz
+          echo "$PWD/binaryen-version_${v}/bin" >> $GITHUB_PATH
+
       - run: bun install
       - run: bun run build
 
