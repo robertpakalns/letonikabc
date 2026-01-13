@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - run: ls -R
+
       - uses: actions/checkout@v4
 
       - uses: oven-sh/setup-bun@v2
@@ -39,5 +41,5 @@ jobs:
 
       - uses: peaceiris/actions-gh-pages@v4
         with:
-          publish_dir: ./dist
+          publish_dir: dist
           github_token: ${{ secrets.GITHUB_TOKEN }}
