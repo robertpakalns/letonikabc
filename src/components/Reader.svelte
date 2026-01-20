@@ -23,7 +23,10 @@
     const handleFileChange = async (event: Event): Promise<void> => {
         const input = event.target as HTMLInputElement;
         const file = input.files?.[0];
-        if (!file) return;
+        if (!file) {
+            goBack();
+            return;
+        }
 
         const text: string = await file.text();
         const mdData: ParseOutput = parse_html_to_markdown(text);
@@ -66,6 +69,7 @@
     accept=".html"
     hidden
     onchange={handleFileChange}
+    oncancel={handleFileChange}
 />
 
 <style>
