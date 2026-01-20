@@ -4,6 +4,12 @@
 
     type State = "menu" | "reader";
     let state: State = "menu";
+    let skipManual = false;
+
+    const openReader = (skip: boolean) => {
+        skipManual = skip;
+        state = "reader";
+    };
 
     const changeState = (s: State) => {
         state = s;
@@ -12,9 +18,9 @@
 
 <div class="globalWrapper">
     {#if state === "menu"}
-        <Menu openReader={() => changeState("reader")} />
+        <Menu {openReader} />
     {:else}
-        <Reader goBack={() => changeState("menu")} />
+        <Reader {skipManual} goBack={() => changeState("menu")} />
     {/if}
 </div>
 
