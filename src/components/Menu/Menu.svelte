@@ -1,6 +1,7 @@
 <script lang="ts">
-    let { openReader } = $props<{
+    let { openReader, openLoader } = $props<{
         openReader: (skip: boolean) => void;
+        openLoader: () => void;
     }>();
 
     let skip = $state(false);
@@ -22,7 +23,7 @@
                 </label>
             </div>
 
-            <button class="btn">Load</button>
+            <button class="btn" onclick={openLoader}>Load</button>
         </div>
 
         <div class="text">
@@ -52,8 +53,13 @@
         flex-direction: column;
         gap: 5px;
 
+        label {
+            cursor: pointer;
+            user-select: none;
+        }
+
         input {
-            width: fit-content;
+            cursor: pointer;
         }
     }
 </style>

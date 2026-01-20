@@ -5,6 +5,7 @@
         convert_parsed_markdown_to_html,
     } from "../../crates/app/pkg/app";
     import { onMount } from "svelte";
+    import { addRecord } from "../db";
 
     let { goBack, skipManual = false } = $props<{
         goBack: () => void;
@@ -30,8 +31,11 @@
 
         const text: string = await file.text();
         const mdData: ParseOutput = parse_html_to_markdown(text);
+        const { markdown } = mdData;
 
-        content = convert_parsed_markdown_to_html(mdData.markdown);
+        addRecord(markdown);
+
+        content = convert_parsed_markdown_to_html(markdown);
         mode = "reader";
     };
 
