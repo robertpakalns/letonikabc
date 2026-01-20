@@ -8,7 +8,7 @@
     "dev": "wasm-pack build crates/app --debug --target web && bun vite",
     "build": "bun run pack-wasm && bun vite build",
     "preview": "bun run build && bun vite preview",
-    "extract": "bun run build && wasm2wat crates/app/pkg/app_bg.wasm -o crates/app/pkg/release.wat",
+    "extract": "bun run build && wasm2wat crates/app/pkg/app_bg.wasm -o crates/app/pkg/.wat",
     "opt": "wasm-opt -Oz crates/app/pkg/app_bg.wasm -o crates/app/pkg/app_bg.wasm --enable-bulk-memory --enable-nontrapping-float-to-int --strip-debug --strip-dwarf --strip-producers --strip-target-features",
     "test": "cargo test --target x86_64-pc-windows-msvc",
     "pack-wasm": "cargo build -r && wasm-bindgen target/wasm32-unknown-unknown/release/app.wasm --out-dir crates/app/pkg --target web && bun run opt"

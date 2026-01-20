@@ -21,6 +21,8 @@ export default defineConfig({
       },
       mangle: true,
     },
-    polyfillModulePreload: false,
+    modulePreload: {
+      polyfill: false,
+    },
   },
 });

@@ -29,8 +29,8 @@ reader = { path = "crates/reader" }
 utils = { path = "crates/utils" }
 
 # External
-wasm-bindgen = { version = "0.2.106", default-features = false }
-web-sys = { version = "0.3.83", default-features = false, features = [
+wasm-bindgen = { version = "0.2.108", default-features = false }
+web-sys = { version = "0.3.85", default-features = false, features = [
     "console"
 ] }
 wee_alloc = { version = "0.4.5", default-features = false }

@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: oven-sh/setup-bun@v2
         with:
@@ -20,16 +20,16 @@ jobs:
 
       - run: rustup target add wasm32-unknown-unknown
 
-      # Install Binaryen
-      - run: |
+      - name: Install Binaryen
+        run: |
           v=125
           wget https://github.com/WebAssembly/binaryen/releases/download/version_${v}/binaryen-version_${v}-x86_64-linux.tar.gz
           tar -xzf binaryen-version_${v}-x86_64-linux.tar.gz
           echo "$PWD/binaryen-version_${v}/bin" >> $GITHUB_PATH
 
-      # Install wasm-bindgen CLI
-      - run: |
-          v=0.2.106
+      - name: Install wasm-bindgen CLI
+        run: |
+          v=0.2.108
           wget https://github.com/wasm-bindgen/wasm-bindgen/releases/download/${v}/wasm-bindgen-${v}-x86_64-unknown-linux-musl.tar.gz
           tar -xzf wasm-bindgen-${v}-x86_64-unknown-linux-musl.tar.gz
           echo "$PWD/wasm-bindgen-${v}-x86_64-unknown-linux-musl" >> $GITHUB_PATH
