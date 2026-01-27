@@ -10,12 +10,7 @@ license-file.workspace = true
 [lib]
 crate-type = ["cdylib"]
 
-# Use wasm-opt separately via bun run opt
-[package.metadata.wasm-pack.profile.release]
-wasm-opt = false
-
 [dependencies]
-# Crates
 parser.workspace = true
 reader.workspace = true
 

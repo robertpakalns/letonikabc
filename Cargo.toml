@@ -1,10 +1,5 @@
 [workspace]
-members = [
-  "crates/app",
-  "crates/parser",
-  "crates/reader",
-  "crates/utils",
-]
+members = ["crates/app", "crates/parser", "crates/reader", "crates/utils"]
 resolver = "2"
 
 [workspace.package]
@@ -23,7 +18,6 @@ debug = false
 debug-assertions = false
 
 [workspace.dependencies]
-# Crates
 parser = { path = "crates/parser" }
 reader = { path = "crates/reader" }
 utils = { path = "crates/utils" }
@@ -31,6 +25,6 @@ utils = { path = "crates/utils" }
 # External
 wasm-bindgen = { version = "0.2.108", default-features = false }
 web-sys = { version = "0.3.85", default-features = false, features = [
-    "console"
+  "console",
 ] }
 wee_alloc = { version = "0.4.5", default-features = false }
