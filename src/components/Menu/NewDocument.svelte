@@ -46,7 +46,19 @@
 <div class="centerWrapper">
     <div class="centered">
         <header>How to load a document</header>
-        <p>...</p>
+        <ol>
+            <li>
+                Get a raw document from <a
+                    href="https://www.letonika.lv/"
+                    target="_blank"
+                >
+                    letonika.lv
+                </a>
+            </li>
+            <li>Save it on local machine</li>
+            <li>Click "Open"</li>
+            <li>Choose the document</li>
+        </ol>
 
         <div class="buttons">
             <button class="btn" onclick={requestFile}>Open</button>
@@ -63,3 +75,10 @@
     onchange={handleFileChange}
     oncancel={handleFileChange}
 />
+
+<style>
+    ol {
+        padding-left: 2rem;
+        /*font-style: italic;*/
+    }
+</style>

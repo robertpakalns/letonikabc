@@ -13,6 +13,7 @@ body,
 }
 
 header {
+    font-weight: 700;
     font-size: 1.5rem;
     width: 100%;
     text-align: center;
@@ -66,8 +67,20 @@ a {
     gap: 5px;
 }
 
+.btn-panel {
+    padding: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 /* Intentionally use HTML elements without classes to not bloat generated HTML */
 .reader {
+    padding: 2rem;
+    max-width: 700px;
+    margin: 20px auto;
+    line-height: 1.3rem;
+
     h1,
     h2 {
         margin: 20px 0;

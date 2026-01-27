@@ -20,17 +20,9 @@
     });
 </script>
 
-<div>
+<div class="btn-panel">
     <button class="btn" onclick={goBack}>Back</button>
 </div>
 
 <!-- Insert raw HTML -->
 <div class="reader">{@html content}</div>
-
-<style>
-    .reader {
-        max-width: 800px;
-        margin: 20px auto;
-        line-height: 1.3rem;
-    }
-</style>

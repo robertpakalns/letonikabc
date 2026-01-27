@@ -14,7 +14,7 @@
     });
 </script>
 
-<div>
+<div class="btn-panel">
     <button class="btn" onclick={goBack}>Back</button>
 </div>
 

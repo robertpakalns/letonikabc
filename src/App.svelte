@@ -28,15 +28,6 @@
     };
 </script>
 
-<!--
-     TODO:
-     1. Handle file open in a separate component
-     2. Save data in IndexedDB
-     3. Save parsed document ID
-     4. Open reader with the ID as prop
-     5. Get markdown using document ID from IndexedDB
--->
-
 <div class="globalWrapper">
     {#if state === "menu"}
         <Menu openNew={(skip) => openReader(skip)} {openLoader} />
@@ -58,7 +49,7 @@
         width: 100vw;
         height: 100vh;
         overflow-y: auto;
-        background: #323339;
+        background: #323339; /* Dark mode for now */
         color: #dbdcde;
         text-align: justify;
     }
