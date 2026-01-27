@@ -41,12 +41,12 @@
     {#if state === "menu"}
         <Menu openNew={(skip) => openReader(skip)} {openLoader} />
     {:else if state === "load"}
-        <LoadDocuments />
+        <LoadDocuments goBack={() => changeState("menu")} goRead={newReader} />
     {:else if state === "new"}
         <NewDocument
             {skipManual}
             goBack={() => changeState("menu")}
-            goRead={(id) => newReader(id)}
+            goRead={newReader}
         />
     {:else if state === "reader"}
         <Reader {readId} goBack={() => changeState("menu")} />
