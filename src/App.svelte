@@ -1,14 +1,21 @@
 <script lang="ts">
+    import LoadDocuments from "./components/Menu/LoadDocuments.svelte";
+    import NewDocument from "./components/Menu/NewDocument.svelte";
     import Menu from "./components/Menu/Menu.svelte";
     import Reader from "./components/Reader.svelte";
-    import LoadDocuments from "./components/Menu/LoadDocuments.svelte";
 
-    type State = "menu" | "reader" | "load";
+    type State = "menu" | "reader" | "load" | "new";
     let state: State = "menu";
     let skipManual = false;
+    let readId: number;
 
     const openReader = (skip: boolean) => {
         skipManual = skip;
+        state = "new";
+    };
+
+    const newReader = (id: number): void => {
+        readId = id;
         state = "reader";
     };
 
@@ -32,11 +39,17 @@
 
 <div class="globalWrapper">
     {#if state === "menu"}
-        <Menu {openReader} {openLoader} />
+        <Menu openNew={(skip) => openReader(skip)} {openLoader} />
     {:else if state === "load"}
         <LoadDocuments />
-    {:else}
-        <Reader {skipManual} goBack={() => changeState("menu")} />
+    {:else if state === "new"}
+        <NewDocument
+            {skipManual}
+            goBack={() => changeState("menu")}
+            goRead={(id) => newReader(id)}
+        />
+    {:else if state === "reader"}
+        <Reader {readId} goBack={() => changeState("menu")} />
     {/if}
 </div>
 

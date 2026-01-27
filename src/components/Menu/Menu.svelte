@@ -1,6 +1,6 @@
 <script lang="ts">
-    let { openReader, openLoader } = $props<{
-        openReader: (skip: boolean) => void;
+    let { openNew, openLoader } = $props<{
+        openNew: (skip: boolean) => void;
         openLoader: () => void;
     }>();
 
@@ -13,9 +13,7 @@
 
         <div class="buttons">
             <div class="btnWithCheckbox">
-                <button class="btn" onclick={() => openReader(skip)}>
-                    New
-                </button>
+                <button class="btn" onclick={() => openNew(skip)}> New </button>
 
                 <label>
                     <input type="checkbox" bind:checked={skip} />
