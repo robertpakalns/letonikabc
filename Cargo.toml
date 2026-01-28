@@ -23,6 +23,7 @@ reader = { path = "crates/reader" }
 utils = { path = "crates/utils" }
 
 # External
+blake3 = { version = "1.8.3", default-features = false }
 wasm-bindgen = { version = "0.2.108", default-features = false }
 web-sys = { version = "0.3.85", default-features = false, features = [
   "console",

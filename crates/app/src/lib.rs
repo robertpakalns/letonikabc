@@ -49,4 +49,9 @@ impl ParseOutput {
     pub fn header_lines(&self) -> Vec<usize> {
         self.inner.header_lines.clone()
     }
+
+    #[wasm_bindgen(getter)]
+    pub fn hash(&self) -> String {
+        self.inner.hash.clone()
+    }
 }

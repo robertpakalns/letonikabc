@@ -40,7 +40,7 @@ fn start_element(
     *state = Some(el);
 }
 
-pub fn parse(html: &str) -> (String, Vec<usize>) {
+pub fn parse(html: &str) -> (String, Vec<usize>, String) {
     let mut chars = html.chars().peekable();
 
     let mut buffer = String::new();
@@ -153,6 +153,12 @@ pub fn parse(html: &str) -> (String, Vec<usize>) {
         &mut header_lines,
     );
 
-    let markdown = lines.join("\n");
-    (markdown, header_lines)
+    let md = lines.join("\n");
+    let hash = create_hash(&md);
+
+    (md, header_lines, hash)
+}
+
+pub fn create_hash(md: &str) -> String {
+    blake3::hash(md.as_bytes()).to_hex().to_string()
 }

@@ -12,3 +12,6 @@ crate-type = ["lib"]
 
 [dependencies]
 utils.workspace = true
+
+# External
+blake3.workspace = true
