@@ -7,15 +7,15 @@
     type State = "menu" | "reader" | "load" | "new";
     let state: State = "menu";
     let skipManual = false;
-    let readId: number;
+    let readHash: string;
 
     const openReader = (skip: boolean) => {
         skipManual = skip;
         state = "new";
     };
 
-    const newReader = (id: number): void => {
-        readId = id;
+    const newReader = (hash: string): void => {
+        readHash = hash;
         state = "reader";
     };
 
@@ -40,7 +40,7 @@
             goRead={newReader}
         />
     {:else if state === "reader"}
-        <Reader {readId} goBack={() => changeState("menu")} />
+        <Reader {readHash} goBack={() => changeState("menu")} />
     {/if}
 </div>
 

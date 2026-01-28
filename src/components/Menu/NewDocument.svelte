@@ -10,7 +10,7 @@
     } = $props<{
         goBack: () => void;
         skipManual: boolean;
-        goRead: (idx: number) => void;
+        goRead: (readHash: string) => void;
     }>();
 
     let fileInput: HTMLInputElement;
@@ -29,11 +29,11 @@
 
         const text: string = await file.text();
         const mdData = parse_html_to_markdown(text);
-        const { markdown } = mdData;
+        const { markdown, hash } = mdData;
 
-        const idx = await addRecord(markdown);
+        const readHash = await addRecord(hash, markdown);
 
-        goRead(idx);
+        goRead(readHash);
     };
 
     onMount(() => {

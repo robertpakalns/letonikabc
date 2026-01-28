@@ -6,7 +6,7 @@
 
     const { goBack, goRead } = $props<{
         goBack: () => void;
-        goRead: (readId: number) => void;
+        goRead: (readHash: string) => void;
     }>();
 
     onMount(async () => {
@@ -32,9 +32,12 @@
                     <tr>
                         <td>{i + 1}</td>
                         <td>
-                            <button onclick={() => goRead(i + 1)} class="btn"
-                                >Go</button
+                            <button
+                                onclick={() => goRead(record.hash)}
+                                class="btn"
                             >
+                                Go
+                            </button>
                         </td>
                     </tr>
                 {/each}

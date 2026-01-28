@@ -3,15 +3,15 @@
     import { getRecord } from "../db";
     import { onMount } from "svelte";
 
-    let { goBack, readId } = $props<{
+    let { goBack, readHash } = $props<{
         goBack: () => void;
-        readId: number;
+        readHash: string;
     }>();
 
     let content = $state<string>("");
 
     onMount(async () => {
-        const data = await getRecord(readId);
+        const data = await getRecord(readHash);
         if (!data) return;
 
         const html = convert_parsed_markdown_to_html(data.value);
