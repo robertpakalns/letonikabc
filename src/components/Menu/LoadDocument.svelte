@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { getAll, type MDRecord } from "../../db";
+    import { getAll, deleteRecord, type MDRecord } from "../../db";
 
     let records: MDRecord[] = $state([]);
 
@@ -9,6 +9,11 @@
         goRead: (readHash: string) => void;
         openReader: () => void;
     }>();
+
+    const handleDelete = async (hash: string) => {
+        await deleteRecord(hash);
+        records = records.filter((record) => record.hash !== hash);
+    };
 
     onMount(async () => {
         records = await getAll();
@@ -35,6 +40,12 @@
                                     class="btn"
                                 >
                                     Go
+                                </button>
+                                <button
+                                    onclick={() => handleDelete(record.hash)}
+                                    class="btn"
+                                >
+                                    Delete
                                 </button>
                             </td>
                         </tr>
