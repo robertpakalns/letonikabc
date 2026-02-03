@@ -57,8 +57,7 @@
         width: 100vw;
         height: 100vh;
         overflow-y: auto;
-        background: #323339; /* Dark mode for now */
-        color: #dbdcde;
+        background: var(--bg);
         text-align: justify;
     }
 </style>

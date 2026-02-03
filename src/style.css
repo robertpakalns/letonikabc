@@ -2,7 +2,20 @@
     margin: 0;
     padding: 0;
     font-family: Roboto, sans-serif;
-    color: white; /* Dark mode for now */
+    color: var(--text);
+}
+
+:root {
+    --bg: #d2d2d2;
+    --text: #1c1c1c;
+}
+
+/* Light mode bt default */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #282c33;
+        --text: #dbdcde;
+    }
 }
 
 html,
