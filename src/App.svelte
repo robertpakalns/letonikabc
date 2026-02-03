@@ -1,5 +1,5 @@
 <script lang="ts">
-    import LoadDocuments from "./components/Menu/LoadDocuments.svelte";
+    import LoadDocument from "./components/Menu/LoadDocument.svelte";
     import NewDocument from "./components/Menu/NewDocument.svelte";
     import Menu from "./components/Menu/Menu.svelte";
     import Reader from "./components/Reader.svelte";
@@ -32,7 +32,11 @@
     {#if state === "menu"}
         <Menu openNew={(skip) => openReader(skip)} {openLoader} />
     {:else if state === "load"}
-        <LoadDocuments goBack={() => changeState("menu")} goRead={newReader} />
+        <LoadDocument
+            goBack={() => changeState("menu")}
+            goRead={newReader}
+            openReader={() => openReader(false)}
+        />
     {:else if state === "new"}
         <NewDocument
             {skipManual}
