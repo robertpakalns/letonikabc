@@ -10,7 +10,7 @@
     } = $props<{
         goBack: () => void;
         skipManual: boolean;
-        goRead: (readHash: string) => void;
+        goRead: (readHash: string, error?: string) => void;
     }>();
 
     let fileInput: HTMLInputElement;
@@ -31,9 +31,9 @@
         const mdData = parse_html_to_markdown(text);
         const { markdown, hash } = mdData;
 
-        const readHash = await addRecord(hash, markdown);
+        const { hash: readHash, error } = await addRecord(hash, markdown);
 
-        goRead(readHash);
+        goRead(readHash, error);
     };
 
     onMount(() => {
@@ -79,6 +79,5 @@
 <style>
     ol {
         padding-left: 2rem;
-        /*font-style: italic;*/
     }
 </style>

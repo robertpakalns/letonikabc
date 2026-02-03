@@ -1,3 +1,5 @@
+import { Errors } from "./errorHandler";
+
 const DATABASE = "letonikabc_db";
 const VERSION = 2;
 const MARKDOWN_STORE = "md";
@@ -52,7 +54,7 @@ export const getAll = async (): Promise<MDRecord[]> => {
 export const addRecord = async (
   hash: string,
   value: string,
-): Promise<string> => {
+): Promise<{ hash: string; error?: string }> => {
   const db = await openDB();
   return new Promise((res, rej) => {
     const tx = db.transaction(MARKDOWN_STORE, "readwrite");
@@ -61,14 +63,11 @@ export const addRecord = async (
     const record: MDRecord = { hash, value };
     const request = store.add(record);
 
-    request.onsuccess = () => res(hash);
+    request.onsuccess = () => res({ hash });
     request.onerror = () => {
       if (request.error?.name === "ConstraintError") {
-        // It should throw an error -> display it visually
-        console.warn(
-          "Duplicate entry detected; using the existing one instead",
-        );
-        res(hash);
+        // Return hash to the existing entry with an error text
+        res({ hash, error: Errors.DuplicateMarkdown });
       } else {
         rej(request.error);
       }

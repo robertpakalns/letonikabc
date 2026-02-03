@@ -3,9 +3,10 @@
     import { getRecord } from "../db";
     import { onMount } from "svelte";
 
-    let { goBack, readHash } = $props<{
+    let { goBack, readHash, displayError } = $props<{
         goBack: () => void;
         readHash: string;
+        displayError: string | undefined;
     }>();
 
     let content = $state<string>("");
@@ -24,5 +25,18 @@
     <button class="btn" onclick={goBack}>Back</button>
 </div>
 
+{#if displayError !== undefined}
+    <div class="errorCont">{displayError}</div>
+{/if}
+
 <!-- Insert raw HTML -->
 <div class="reader">{@html content}</div>
+
+<style>
+    .errorCont {
+        margin: 10px;
+        width: 100%;
+        text-align: center;
+        color: #ff4b53;
+    }
+</style>

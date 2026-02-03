@@ -8,15 +8,17 @@
     let state: State = "menu";
     let skipManual = false;
     let readHash: string;
+    let displayError: string | undefined;
 
     const openReader = (skip: boolean) => {
         skipManual = skip;
         state = "new";
     };
 
-    const newReader = (hash: string): void => {
+    const newReader = (hash: string, error: string | undefined): void => {
         readHash = hash;
         state = "reader";
+        displayError = error;
     };
 
     const openLoader = () => {
@@ -32,9 +34,11 @@
     {#if state === "menu"}
         <Menu openNew={(skip) => openReader(skip)} {openLoader} />
     {:else if state === "load"}
+        <!-- goRead: no error by design -->
+        <!-- openReader: no skip option -->
         <LoadDocument
             goBack={() => changeState("menu")}
-            goRead={newReader}
+            goRead={(hash) => newReader(hash, undefined)}
             openReader={() => openReader(false)}
         />
     {:else if state === "new"}
@@ -44,7 +48,7 @@
             goRead={newReader}
         />
     {:else if state === "reader"}
-        <Reader {readHash} goBack={() => changeState("menu")} />
+        <Reader {readHash} goBack={() => changeState("menu")} {displayError} />
     {/if}
 </div>
 
