@@ -5,20 +5,14 @@
   "description": "Tīmekļa vietne, kurā lietotājs lejupielādē teksta failu no letonika.lv vietnes un izmanto kā alternatīvu lasītāvu",
   "main": "index.js",
   "scripts": {
-    "dev": "wasm-pack build crates/app --debug --target web && bun vite",
+    "dev": "cargo build && wasm-bindgen target/wasm32-unknown-unknown/debug/app.wasm --out-dir pkg --target web && bun vite",
     "build": "bun run pack-wasm && bun vite build",
     "preview": "bun run build && bun vite preview",
-    "extract": "bun run build && wasm2wat crates/app/pkg/app_bg.wasm -o crates/app/pkg/.wat",
-    "opt": "wasm-opt -Oz crates/app/pkg/app_bg.wasm -o crates/app/pkg/app_bg.wasm --enable-bulk-memory --enable-nontrapping-float-to-int --strip-debug --strip-dwarf --strip-producers --strip-target-features",
+    "extract": "bun run build && wasm2wat pkg/app_bg.wasm -o pkg/.wat",
+    "opt": "wasm-opt -Oz pkg/app_bg.wasm -o pkg/app_bg.wasm --enable-bulk-memory --enable-nontrapping-float-to-int --strip-debug --strip-dwarf --strip-producers --strip-target-features",
     "test": "cargo test --target x86_64-pc-windows-msvc",
-    "pack-wasm": "cargo build -r && wasm-bindgen target/wasm32-unknown-unknown/release/app.wasm --out-dir crates/app/pkg --target web && bun run opt"
+    "pack-wasm": "cargo build -r && wasm-bindgen target/wasm32-unknown-unknown/release/app.wasm --out-dir pkg --target web && bun run opt"
   },
-  "keywords": [
-    "letonika",
-    "reader",
-    "rust",
-    "wasm"
-  ],
   "author": "robertpakalns",
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^6.2.2",

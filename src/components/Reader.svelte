@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { convert_parsed_markdown_to_html } from "../../crates/app/pkg/app";
+    import { convert_parsed_markdown_to_html } from "../../pkg/app";
     import { getRecord } from "../db";
     import { onMount } from "svelte";
 

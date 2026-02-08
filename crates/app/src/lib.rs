@@ -8,7 +8,7 @@ use wee_alloc::WeeAlloc;
 use parser::{ParseOut, parse};
 use reader::convert;
 
-/// The WASM is built without the Rust standart library, which significantly reduces the binary size
+/// The crate is built without the Rust standart library, which significantly reduces the binary size
 ///
 /// Never use dependencies which do not support `no_std` and never use `std` methods
 #[cfg(not(test))]

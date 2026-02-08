@@ -11,4 +11,5 @@ license-file.workspace = true
 crate-type = ["lib"]
 
 [dependencies]
+# External
 web-sys.workspace = true
