@@ -81,7 +81,7 @@ fn flush_buffer(
     element_state: &mut Option<El>,
     buffer: &mut String,
     lines: &mut Vec<String>,
-    header_lines: &mut Vec<usize>,
+    heading_lines: &mut Vec<usize>,
 ) {
     if let Some(el) = element_state.take() {
         let text = buffer.trim();
@@ -95,7 +95,7 @@ fn flush_buffer(
                 }
                 El::Heading(level) => {
                     lines.push(format!("<h{level}>{}</h{level}>", text));
-                    header_lines.push(lines.len() - 1);
+                    heading_lines.push(lines.len() - 1);
                 }
             }
         }
@@ -108,7 +108,7 @@ pub fn convert(md: &str) -> String {
     let mut element_state: Option<El> = None;
     let mut buffer = String::new();
     let mut lines = Vec::new();
-    let mut header_lines = Vec::new();
+    let mut heading_lines = Vec::new();
 
     for line in md.lines() {
         let trimmed = line.trim();
@@ -119,7 +119,7 @@ pub fn convert(md: &str) -> String {
                 &mut element_state,
                 &mut buffer,
                 &mut lines,
-                &mut header_lines,
+                &mut heading_lines,
             );
             continue;
         }
@@ -139,7 +139,7 @@ pub fn convert(md: &str) -> String {
                 &mut element_state,
                 &mut buffer,
                 &mut lines,
-                &mut header_lines,
+                &mut heading_lines,
             );
             let level = count.min(6);
             element_state = Some(El::Heading(level));
@@ -152,7 +152,7 @@ pub fn convert(md: &str) -> String {
             &mut element_state,
             &mut buffer,
             &mut lines,
-            &mut header_lines,
+            &mut heading_lines,
         );
         element_state = Some(El::Paragraph);
         buffer.push_str(trimmed);
@@ -162,7 +162,7 @@ pub fn convert(md: &str) -> String {
         &mut element_state,
         &mut buffer,
         &mut lines,
-        &mut header_lines,
+        &mut heading_lines,
     );
 
     for line in lines {

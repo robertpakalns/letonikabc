@@ -8,16 +8,16 @@ mod tests;
 
 pub struct ParseOut {
     pub markdown: String,
-    pub header_lines: Vec<usize>,
+    pub heading_lines: Vec<usize>,
     pub hash: String,
 }
 
 pub fn parse(html: &str) -> ParseOut {
-    let (markdown, header_lines, hash) = parse_html::parse(html);
+    let (markdown, heading_lines, hash) = parse_html::parse(html);
 
     ParseOut {
         markdown,
-        header_lines,
+        heading_lines,
         hash,
     }
 }

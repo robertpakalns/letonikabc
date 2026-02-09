@@ -5,9 +5,9 @@ mod tests {
     // PARAGRAPHS
 
     #[test]
-    fn no_headers() {
-        let md = "Just some text without headers.";
-        let expected = "<p>Just some text without headers.</p>";
+    fn no_headings() {
+        let md = "Just some text without headings.";
+        let expected = "<p>Just some text without headings.</p>";
 
         assert_eq!(convert(md), expected);
     }
@@ -20,10 +20,10 @@ mod tests {
         assert_eq!(convert(md), expected);
     }
 
-    // HEADERS
+    // HEADINGS
 
     #[test]
-    fn headers() {
+    fn headings() {
         let md = "# H1\n## H2\n### H3\n#### H4\n##### H5\n###### H6";
         let expected = "<h1>H1</h1><h2>H2</h2><h3>H3</h3><h4>H4</h4><h5>H5</h5><h6>H6</h6>";
 

@@ -10,7 +10,7 @@ fn flush_buffer(
     element_state: &mut Option<El>,
     buffer: &mut String,
     lines: &mut Vec<String>,
-    header_lines: &mut Vec<usize>,
+    heading_lines: &mut Vec<usize>,
 ) {
     if let Some(el) = element_state.take() {
         let text = buffer.trim();
@@ -19,7 +19,7 @@ fn flush_buffer(
                 El::Paragraph => lines.push(text.to_string()),
                 El::Heading(level) => {
                     lines.push(format!("{} {}", "#".repeat(level), text));
-                    header_lines.push(lines.len());
+                    heading_lines.push(lines.len());
                 }
             }
         }
@@ -31,10 +31,10 @@ fn start_element(
     state: &mut Option<El>,
     buffer: &mut String,
     lines: &mut Vec<String>,
-    headers: &mut Vec<usize>,
+    headings: &mut Vec<usize>,
     el: El,
 ) {
-    flush_buffer(state, buffer, lines, headers);
+    flush_buffer(state, buffer, lines, headings);
     *state = Some(el);
 }
 
@@ -43,7 +43,7 @@ pub fn parse(html: &str) -> (String, Vec<usize>, String) {
 
     let mut buffer = String::new();
     let mut lines = Vec::new();
-    let mut header_lines = Vec::new();
+    let mut heading_lines = Vec::new();
 
     let mut element_state: Option<El> = None;
     let mut span_depth = 0;
@@ -88,7 +88,7 @@ pub fn parse(html: &str) -> (String, Vec<usize>, String) {
                 &mut element_state,
                 &mut buffer,
                 &mut lines,
-                &mut header_lines,
+                &mut heading_lines,
             ),
             (true, "span") if span_depth > 0 => {
                 span_depth -= 1;
@@ -103,21 +103,21 @@ pub fn parse(html: &str) -> (String, Vec<usize>, String) {
                 &mut element_state,
                 &mut buffer,
                 &mut lines,
-                &mut header_lines,
+                &mut heading_lines,
                 El::Paragraph,
             ),
             (false, "h1") => start_element(
                 &mut element_state,
                 &mut buffer,
                 &mut lines,
-                &mut header_lines,
+                &mut heading_lines,
                 El::Heading(1),
             ),
             (false, "h2") => start_element(
                 &mut element_state,
                 &mut buffer,
                 &mut lines,
-                &mut header_lines,
+                &mut heading_lines,
                 El::Heading(2),
             ),
             (false, "br") => {
@@ -148,13 +148,13 @@ pub fn parse(html: &str) -> (String, Vec<usize>, String) {
         &mut element_state,
         &mut buffer,
         &mut lines,
-        &mut header_lines,
+        &mut heading_lines,
     );
 
     let md = lines.join("\n");
     let hash = create_hash(&md);
 
-    (md, header_lines, hash)
+    (md, heading_lines, hash)
 }
 
 fn create_hash(md: &str) -> String {
