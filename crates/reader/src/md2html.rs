@@ -2,8 +2,6 @@ use alloc::{format, string::String, vec::Vec};
 
 use utils::El;
 
-mod tests;
-
 fn wrap_spans(text: &str) -> String {
     let mut result = String::new();
     let mut chars = text.chars().peekable();

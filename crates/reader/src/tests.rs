@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use super::super::convert;
+    use crate::md2html::convert;
 
     #[test]
     fn headers() {

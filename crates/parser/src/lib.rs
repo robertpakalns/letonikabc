@@ -4,6 +4,7 @@ extern crate alloc;
 use alloc::{string::String, vec::Vec};
 
 mod parse_html;
+mod tests;
 
 pub struct ParseOut {
     pub markdown: String,

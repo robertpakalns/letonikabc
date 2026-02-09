@@ -6,8 +6,6 @@ use alloc::{
 
 use utils::El;
 
-mod tests;
-
 fn flush_buffer(
     element_state: &mut Option<El>,
     buffer: &mut String,
@@ -159,6 +157,6 @@ pub fn parse(html: &str) -> (String, Vec<usize>, String) {
     (md, header_lines, hash)
 }
 
-pub fn create_hash(md: &str) -> String {
+fn create_hash(md: &str) -> String {
     blake3::hash(md.as_bytes()).to_hex().to_string()
 }

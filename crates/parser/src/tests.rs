@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use super::super::parse;
+    use crate::parse_html::parse;
     use alloc::vec;
 
     #[test]
