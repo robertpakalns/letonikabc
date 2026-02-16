@@ -56,15 +56,14 @@ Tīmekļa vietne, kurā lietotājs lejupielādē teksta failu no [letonika.lv](h
 ## Funkcionālās prasības
 1. Sistēma ļauj lietotājam augšupielādēt teksta failu no savas ierīces.
 2. Sistēma pārbauda, vai fails ir derīgs turpmākai apstrādei.
-3. Sistēma sagatavo failu lietošanai un parāda to lietotāja saskarnē.
-4. Sistēma automātiski iegūst dokumenta pamatinformāciju (ID, nosaukumu, autoru, izmēru utt.).
-5. Sistēma saglabā dokumentu iebūvētajā datubāzē turpmākai lietošanai.
-6. Sistēma parāda lietotājam saglabāto dokumentu sarakstu.
-7. Sistēma ļauj lietotājam atvērt izvēlēto dokumentu lasīšanas režīmā.
-8. Sistēma nodrošina teksta meklēšanu dokumenta saturā.
-9. Sistēma ļauj lietotājam ierobežot meklēšanu uz izvēlētām teksta daļām.
-10. Sistēma ļauj lietotājam labot dokumenta nosaukumu un autoru.
-11. Sistēma ļauj importēt un eksportēt dokumentus `.md` formātā.
+3. Sistēma automātiski iegūst un saglabā dokumenta pamatinformāciju (ID, oriģinālā un jaunā faila izmēru, lietotāja pēdējo pozīciju dokumentā utt.).
+4. Sistēma saglabā dokumentu iebūvētajā datubāzē turpmākai lietošanai.
+5. Sistēma parāda lietotājam saglabāto dokumentu sarakstu.
+6. Sistēma ļauj lietotājam atvērt izvēlēto dokumentu lasīšanas režīmā.
+7. Sistēma nodrošina teksta meklēšanu dokumenta saturā.
+8. Sistēma ļauj lietotājam ierobežot meklēšanu uz izvēlētām teksta daļām.
+9. Sistēma ļauj lietotājam pievienot un labot dokumenta nosaukumu un autoru.
+10. Sistēma ļauj importēt un eksportēt dokumentus `.md` formātā.
 
 ## Nefunkcionālās prasības
 
@@ -99,7 +98,7 @@ Pārlūkprogrammas, kuras atbalstīs sistēmu:
   * Atbalstītais faila izmērs: līdz 15 MB
 
 * Dokumenta saglabāšana
-  * Oriģinālais teksta fails tiek dzēsts pēc apstrādes, lai samazinātu atmiņas patēriņu
+  * Oriģinālais teksta fails netiek izmantots, lai samazinātu atmiņas patēriņu
   * Saglabāšanas laiks: līdz 1 sekundei
 
 * Dokumenta atvēršana
