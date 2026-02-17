@@ -44,6 +44,16 @@ mod tests {
     }
 
     #[test]
+    fn more_headings() {
+        let html = "<h1>H1</h1><h2>H2</h2><h3>H3</h3><h4>H4</h4><h5>H5</h5><h6>H6</h6>";
+
+        let (md, heading, _) = parse(html);
+
+        assert_eq!(md, "# H1\n## H2\n### H3\n#### H4\n##### H5\n###### H6");
+        assert_eq!(heading, vec![1, 2, 3, 4, 5, 6]);
+    }
+
+    #[test]
     fn nested_heading_and_paragraphs() {
         let html = "<h1>Main Title</h1><p>Intro text</p><h2>Subheading</h2><p>More text</p>";
         let (md, heading, _) = parse(html);

@@ -84,7 +84,7 @@ pub fn parse(html: &str) -> (String, Vec<usize>, String) {
             .to_lowercase();
 
         match (end, name.as_str()) {
-            (true, "p" | "h1" | "h2") => flush_buffer(
+            (true, "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6") => flush_buffer(
                 &mut element_state,
                 &mut buffer,
                 &mut lines,
@@ -106,20 +106,18 @@ pub fn parse(html: &str) -> (String, Vec<usize>, String) {
                 &mut heading_lines,
                 El::Paragraph,
             ),
-            (false, "h1") => start_element(
-                &mut element_state,
-                &mut buffer,
-                &mut lines,
-                &mut heading_lines,
-                El::Heading(1),
-            ),
-            (false, "h2") => start_element(
-                &mut element_state,
-                &mut buffer,
-                &mut lines,
-                &mut heading_lines,
-                El::Heading(2),
-            ),
+            // h1..h6
+            (false, name @ ("h1" | "h2" | "h3" | "h4" | "h5" | "h6")) => {
+                let level = name[1..].parse::<usize>().unwrap_or(6);
+
+                start_element(
+                    &mut element_state,
+                    &mut buffer,
+                    &mut lines,
+                    &mut heading_lines,
+                    El::Heading(level),
+                );
+            }
             (false, "br") => {
                 if let Some(El::Paragraph) = element_state {
                     lines.push(buffer.trim().to_string());
