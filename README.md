@@ -55,8 +55,8 @@ Tīmekļa vietne, kurā lietotājs lejupielādē teksta failu no [letonika.lv](h
 
 ## Funkcionālās prasības
 1. Sistēma ļauj lietotājam augšupielādēt teksta failu no savas ierīces.
-2. Sistēma pārbauda, vai fails ir derīgs turpmākai apstrādei.
-3. Sistēma automātiski iegūst un saglabā dokumenta pamatinformāciju (ID, oriģinālā un jaunā faila izmēru, lietotāja pēdējo pozīciju dokumentā utt.).
+2. Sistēma pārbauda, vai fails ir derīgs turpmākai apstrādei, un apstrādā to.
+3. Sistēma automātiski iegūst un saglabā dokumenta pamatinformāciju (ID, izmēru, lietotāja pēdējo pozīciju dokumentā utt.).
 4. Sistēma saglabā dokumentu iebūvētajā datubāzē turpmākai lietošanai.
 5. Sistēma parāda lietotājam saglabāto dokumentu sarakstu.
 6. Sistēma ļauj lietotājam atvērt izvēlēto dokumentu lasīšanas režīmā.
