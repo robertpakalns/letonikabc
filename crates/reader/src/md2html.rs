@@ -1,4 +1,8 @@
-use alloc::{format, string::String, vec::Vec};
+use alloc::{
+    format,
+    string::{String, ToString},
+    vec::Vec,
+};
 
 use utils::El;
 
@@ -53,28 +57,55 @@ fn wrap_spans(text: &str) -> String {
 
 fn wrap_italics(text: &str) -> String {
     let mut result = String::new();
-    let mut chars = text.chars().peekable();
+    let mut italic_buf = String::new();
     let mut in_italic = false;
 
-    while let Some(c) = chars.next() {
+    for c in text.chars() {
         if c == '_' {
             if in_italic {
-                result.push_str("</i>");
+                // Closing _
+                if !italic_buf.trim().is_empty() {
+                    result.push_str("<i>");
+                    result.push_str(&italic_buf);
+                    result.push_str("</i>");
+                }
+                // If empty, emit nothing
+
+                italic_buf.clear();
                 in_italic = false;
             } else {
-                result.push_str("<i>");
+                // Opening _
                 in_italic = true;
             }
+        } else if in_italic {
+            italic_buf.push(c);
         } else {
             result.push(c);
         }
     }
 
+    // If not closed, output as is
     if in_italic {
-        result.push_str("</i>");
+        result.push('_');
+        result.push_str(&italic_buf);
     }
 
-    result
+    let mut cleaned = String::with_capacity(result.len());
+    let mut prev_space = false;
+
+    for c in result.chars() {
+        if c.is_whitespace() {
+            if !prev_space {
+                cleaned.push(' ');
+                prev_space = true;
+            }
+        } else {
+            cleaned.push(c);
+            prev_space = false;
+        }
+    }
+
+    cleaned.trim().to_string()
 }
 
 fn flush_buffer(

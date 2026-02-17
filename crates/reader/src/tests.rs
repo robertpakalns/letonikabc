@@ -110,7 +110,7 @@ mod tests {
     #[test]
     fn unmatched_underscore() {
         let md = "This is _italic without closing.";
-        let expected = "<p>This is <i>italic without closing.</i></p>";
+        let expected = "<p>This is _italic without closing.</p>";
 
         assert_eq!(convert(md), expected);
     }
@@ -126,7 +126,7 @@ mod tests {
     #[test]
     fn empty_italics() {
         let md = "Empty _ _ italics";
-        let expected = "<p>Empty <i> </i> italics</p>";
+        let expected = "<p>Empty italics</p>";
 
         assert_eq!(convert(md), expected);
     }
