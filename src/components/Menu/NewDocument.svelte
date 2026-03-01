@@ -1,6 +1,7 @@
 <script lang="ts">
     import { parse_html_to_markdown } from "../../../pkg/app";
-    import { addRecord } from "../../db";
+
+    import { addMarkdown, MDRecord } from "../../db";
     import { onMount } from "svelte";
 
     const {
@@ -29,9 +30,13 @@
 
         const text: string = await file.text();
         const mdData = parse_html_to_markdown(text);
-        const { markdown, hash } = mdData;
+        const { markdown, hash, heading_lines } = mdData;
 
-        const { hash: readHash, error } = await addRecord(hash, markdown);
+        const record: MDRecord = { hash, value: markdown };
+
+        console.log(heading_lines);
+
+        const { hash: readHash, error } = await addMarkdown(record);
 
         goRead(readHash, error);
     };
