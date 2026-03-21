@@ -1,7 +1,7 @@
 <script lang="ts">
     import { parse_html_to_markdown } from "../../../pkg/app";
 
-    import { addMarkdown, MDRecord } from "../../db";
+    import { addMarkdown, type MDRecord } from "../../db";
     import { onMount } from "svelte";
 
     const {
