@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { getAll, deleteRecord, type MDRecord } from "../../db";
+    import { getAllMarkdowns, deleteMarkdown, type MDRecord } from "../../db";
 
     let records: MDRecord[] = $state([]);
 
@@ -11,12 +11,12 @@
     }>();
 
     const handleDelete = async (hash: string) => {
-        await deleteRecord(hash);
+        await deleteMarkdown(hash);
         records = records.filter((record) => record.hash !== hash);
     };
 
     onMount(async () => {
-        records = await getAll();
+        records = await getAllMarkdowns();
     });
 </script>
 

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { convert_parsed_markdown_to_html } from "../../pkg/app";
-    import { getRecord } from "../db";
+    import { getMarkdown } from "../db";
     import { onMount } from "svelte";
 
     let { goBack, readHash, displayError } = $props<{
@@ -12,7 +12,7 @@
     let content = $state<string>("");
 
     onMount(async () => {
-        const data = await getRecord(readHash);
+        const data = await getMarkdown(readHash);
         if (!data) return;
 
         const html = convert_parsed_markdown_to_html(data.value);
