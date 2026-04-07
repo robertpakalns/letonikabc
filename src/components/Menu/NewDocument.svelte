@@ -34,8 +34,6 @@
 
         const record: MDRecord = { hash, value: markdown };
 
-        console.log(heading_lines);
-
         const { hash: readHash, error } = await addMarkdown(record);
 
         goRead(readHash, error);

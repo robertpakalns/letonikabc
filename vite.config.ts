@@ -11,5 +11,13 @@ export default defineConfig({
     modulePreload: {
       polyfill: false,
     },
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("/pkg/")) return "core";
+          if (id.includes("node_modules")) return "vendor";
+        },
+      },
+    },
   },
 });
