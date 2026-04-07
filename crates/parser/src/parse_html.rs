@@ -46,7 +46,7 @@ pub fn parse(html: &str) -> (String, Vec<usize>, String) {
     let mut heading_lines = Vec::new();
 
     let mut element_state: Option<El> = None;
-    let mut span_depth = 0;
+    let mut span_stack: Vec<bool> = Vec::new();
     let mut italic_depth = 0;
 
     while let Some(&ch) = chars.peek() {
@@ -90,9 +90,11 @@ pub fn parse(html: &str) -> (String, Vec<usize>, String) {
                 &mut lines,
                 &mut heading_lines,
             ),
-            (true, "span") if span_depth > 0 => {
-                span_depth -= 1;
-                buffer.push(']');
+            (true, "span") if !span_stack.is_empty() => {
+                let was_highlight = span_stack.pop().unwrap_or(false);
+                if !was_highlight {
+                    buffer.push(']');
+                }
             }
             (true, "i") if italic_depth > 0 => {
                 italic_depth -= 1;
@@ -125,11 +127,17 @@ pub fn parse(html: &str) -> (String, Vec<usize>, String) {
                 }
             }
             (false, "span") if element_state.is_some() => {
-                span_depth += 1;
-                if tag.contains("class=\"person\"") {
-                    buffer.push_str("@[");
-                } else {
-                    buffer.push('[');
+                let is_highlight = tag.contains("class=\"highlight\"");
+                let is_person = tag.contains("class=\"person\"");
+
+                span_stack.push(is_highlight);
+
+                if !is_highlight {
+                    if is_person {
+                        buffer.push_str("@[");
+                    } else {
+                        buffer.push('[');
+                    }
                 }
             }
             (false, "i") if element_state.is_some() => {

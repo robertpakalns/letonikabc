@@ -26,7 +26,7 @@
 
         <div class="text">
             <p>
-                Source Code:
+                Source code:
                 <a
                     href="https://github.com/robertpakalns/letonikabc"
                     target="_blank"

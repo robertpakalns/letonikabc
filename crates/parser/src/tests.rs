@@ -102,6 +102,15 @@ mod tests {
         assert!(heading.is_empty());
     }
 
+    #[test]
+    fn highlight_span() {
+        let html = r#"<p><span class="highlight">text</span></p>"#;
+        let (md, heading, _) = parse(html);
+
+        assert_eq!(md, "text");
+        assert!(heading.is_empty());
+    }
+
     // STYLING (@[person spans])
 
     #[test]
