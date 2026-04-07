@@ -34,7 +34,6 @@
                     https://github.com/robertpakalns/letonikabc
                 </a>
             </p>
-            <p>by robertpakalns</p>
         </div>
     </div>
 </div>

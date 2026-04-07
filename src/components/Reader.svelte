@@ -35,7 +35,6 @@
 <style>
     .errorCont {
         margin: 10px;
-        width: 100%;
         text-align: center;
         color: #ff4b53;
     }

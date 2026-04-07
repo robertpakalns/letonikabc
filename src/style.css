@@ -5,17 +5,45 @@
     color: var(--text);
 }
 
+/* Light mode */
 :root {
     --bg: #d2d2d2;
     --text: #1c1c1c;
+    --link: #342ffb;
+    --button: #c3c3c3;
+    --button-outline: #9c9c9c;
+    --person: #0c74bb;
 }
 
-/* Light mode bt default */
+/* Dark mode */
 @media (prefers-color-scheme: dark) {
     :root {
         --bg: #282c33;
         --text: #dbdcde;
+        --link: #cab95d;
+        --button: #575757;
+        --button-outline: #7a7a7a;
+        --person: #6ab2ff;
     }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+    transition: 1.3s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    border-radius: 4px;
 }
 
 html,
@@ -36,8 +64,8 @@ header {
     padding: 8px 12px;
     border-radius: 8px;
     outline: none;
-    border: 1px solid #7a7a7a;
-    background: #575757;
+    border: 1px solid var(--button-outline);
+    background: var(--button);
     cursor: pointer;
     transition: 0.3s ease;
     font-size: 1rem;
@@ -50,7 +78,7 @@ header {
 
 a {
     text-decoration: none;
-    color: #cab95d;
+    color: var(--link);
 }
 
 .centerWrapper {
@@ -77,7 +105,7 @@ a {
 .buttons {
     margin: 10px 0;
     display: flex;
-    gap: 5px;
+    gap: 7px;
 }
 
 .btn-panel {
@@ -102,7 +130,7 @@ a {
     }
 
     [data-p] {
-        color: #6ab2ff;
+        color: var(--person);
         font-weight: 600;
     }
 

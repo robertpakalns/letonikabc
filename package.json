@@ -5,7 +5,8 @@
   "description": "Tīmekļa vietne, kurā lietotājs lejupielādē teksta failu no letonika.lv vietnes un izmanto kā alternatīvu lasītāvu",
   "main": "index.js",
   "scripts": {
-    "dev": "cargo build && wasm-bindgen target/wasm32-unknown-unknown/debug/app.wasm --out-dir pkg --target web && bun vite",
+    "wasm": "cargo build && wasm-bindgen target/wasm32-unknown-unknown/debug/app.wasm --out-dir pkg --target web",
+    "dev": "bun run wasm && bun vite",
     "build": "bun run pack-wasm && bun vite build",
     "preview": "bun run build && bun vite preview",
     "extract": "bun run build && wasm2wat pkg/app_bg.wasm -o pkg/.wat",
