@@ -1,4 +1,4 @@
-import { Errors } from "./errorHandler";
+import { Errors } from "@/errorHandler";
 
 const DATABASE = "letonikabc_db";
 const VERSION = 2;
@@ -98,8 +98,7 @@ export const addMarkdown = async (
     request.onsuccess = () => res({ hash });
     request.onerror = () => {
       if (request.error?.name === "ConstraintError") {
-        // Return hash to the existing entry with an error text
-        res({ hash, error: Errors.DuplicateMarkdown });
+        res({ hash, error: Errors.Duplicate });
       } else {
         rej(request.error);
       }
@@ -171,7 +170,13 @@ export const addMetadata = async (
     const { hash } = record;
 
     request.onsuccess = () => res({ hash });
-    request.onerror = () => rej(request.error);
+    request.onerror = () => {
+      if (request.error?.name === "ConstraintError") {
+        res({ hash, error: Errors.Duplicate });
+      } else {
+        rej(request.error);
+      }
+    };
   });
 };
 

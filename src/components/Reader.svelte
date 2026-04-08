@@ -1,22 +1,30 @@
 <script lang="ts">
     import { convert_parsed_markdown_to_html } from "@wasm/app";
+    import { Errors } from "@/errorHandler";
     import { getMarkdown } from "@/db";
     import { onMount } from "svelte";
 
-    let { goBack, readHash, displayError } = $props<{
+    const { goBack, readHash, displayError } = $props<{
         goBack: () => void;
         readHash: string;
-        displayError: string | undefined;
+        displayError?: string;
     }>();
 
     let content = $state<string>("");
+    let error = $state<string | undefined>();
 
     onMount(async () => {
+        if (displayError) {
+            error = displayError;
+        }
+
         const data = await getMarkdown(readHash);
-        if (!data) return;
+        if (!data) {
+            error = Errors.NotFound;
+            return;
+        }
 
         const html = convert_parsed_markdown_to_html(data.value);
-
         content = html;
     });
 </script>
@@ -25,8 +33,8 @@
     <button class="btn" onclick={goBack}>Back</button>
 </div>
 
-{#if displayError !== undefined}
-    <div class="errorCont">{displayError}</div>
+{#if error}
+    <div class="errorCont">{error}</div>
 {/if}
 
 <!-- Insert raw HTML -->
