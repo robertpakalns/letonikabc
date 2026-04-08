@@ -1,6 +1,7 @@
 <script lang="ts">
+    import type { MDRecord, MetadataRecord } from "@/db";
     import { parse_html_to_markdown } from "@wasm/app";
-    import { addMarkdown, type MDRecord } from "@/db";
+    import { addMarkdown, addMetadata } from "@/db";
     import { onMount } from "svelte";
 
     const {
@@ -32,10 +33,24 @@
         const { markdown, hash, heading_lines } = mdData;
 
         const record: MDRecord = { hash, value: markdown };
-
         const { hash: readHash, error } = await addMarkdown(record);
 
-        goRead(readHash, error);
+        const now = new Date().toISOString(); // ISO 8601
+        const oldSize = text.length;
+        const newSize = markdown.length;
+        const metadata: MetadataRecord = {
+            hash,
+            title: "",
+            author: "",
+            size_before: oldSize,
+            size_after: newSize,
+            created_at: now,
+            edited_at: now,
+            last_position: -1,
+        };
+        await addMetadata(metadata);
+
+        await goRead(readHash, error);
     };
 
     onMount(() => {
