@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { convert_parsed_markdown_to_html } from "../../pkg/app";
-    import { getMarkdown } from "../db";
+    import { convert_parsed_markdown_to_html } from "@wasm/app";
+    import { getMarkdown } from "@/db";
     import { onMount } from "svelte";
 
     let { goBack, readHash, displayError } = $props<{

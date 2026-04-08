@@ -1,7 +1,14 @@
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { defineConfig } from "vite";
+import { resolve } from "path";
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      "@": resolve("src"),
+      "@wasm": resolve("pkg"),
+    },
+  },
   base: "/letonikabc/",
   plugins: [svelte()],
   build: {
@@ -11,7 +18,7 @@ export default defineConfig({
     modulePreload: {
       polyfill: false,
     },
-    rollupOptions: {
+    rolldownOptions: {
       output: {
         manualChunks(id) {
           if (id.includes("/pkg/")) return "core";

@@ -5,35 +5,35 @@
     import Reader from "./components/Reader.svelte";
 
     type State = "menu" | "reader" | "load" | "new";
-    let state: State = "menu";
-    let skipManual = false;
-    let readHash: string;
-    let displayError: string | undefined;
+    let appState: State = $state<State>("menu");
+    let skipManual: boolean = $state<boolean>(false);
+    let readHash: string = $state("");
+    let displayError: string | undefined = $state(undefined);
 
     const openReader = (skip: boolean) => {
         skipManual = skip;
-        state = "new";
+        appState = "new";
     };
 
     const newReader = (hash: string, error: string | undefined): void => {
         readHash = hash;
-        state = "reader";
+        appState = "reader";
         displayError = error;
     };
 
     const openLoader = () => {
-        state = "load";
+        appState = "load";
     };
 
     const changeState = (s: State) => {
-        state = s;
+        appState = s;
     };
 </script>
 
 <div class="globalWrapper">
-    {#if state === "menu"}
+    {#if appState === "menu"}
         <Menu openNew={(skip) => openReader(skip)} {openLoader} />
-    {:else if state === "load"}
+    {:else if appState === "load"}
         <!-- goRead: no error by design -->
         <!-- openReader: no skip option -->
         <LoadDocument
@@ -41,13 +41,13 @@
             goRead={(hash) => newReader(hash, undefined)}
             openReader={() => openReader(false)}
         />
-    {:else if state === "new"}
+    {:else if appState === "new"}
         <NewDocument
             {skipManual}
             goBack={() => changeState("menu")}
             goRead={newReader}
         />
-    {:else if state === "reader"}
+    {:else if appState === "reader"}
         <Reader {readHash} goBack={() => changeState("menu")} {displayError} />
     {/if}
 </div>

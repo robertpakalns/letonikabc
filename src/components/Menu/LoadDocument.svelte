@@ -1,6 +1,6 @@
 <script lang="ts">
+    import { getAllMarkdowns, deleteMarkdown, type MDRecord } from "@/db";
     import { onMount } from "svelte";
-    import { getAllMarkdowns, deleteMarkdown, type MDRecord } from "../../db";
 
     let records: MDRecord[] = $state([]);
 
