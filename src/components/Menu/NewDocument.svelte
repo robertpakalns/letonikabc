@@ -68,10 +68,8 @@
         <header>How to load a document</header>
         <ol>
             <li>
-                Get a raw document from <a
-                    href="https://www.letonika.lv/"
-                    target="_blank"
-                >
+                Get a raw document from
+                <a href="https://www.letonika.lv/" target="_blank">
                     letonika.lv
                 </a>
             </li>

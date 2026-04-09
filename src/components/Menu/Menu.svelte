@@ -1,4 +1,6 @@
 <script lang="ts">
+    import Settings from "@/components/Settings.svelte";
+    import Modal from "@/components/Modal.svelte";
     import { navigateToMain } from "@/router";
 
     let { openNew, openLoader } = $props<{
@@ -7,6 +9,9 @@
     }>();
 
     let skip = $state(false);
+
+    // Modal
+    let open = $state(false);
 
     navigateToMain();
 </script>
@@ -26,6 +31,8 @@
             </div>
 
             <button class="btn" onclick={openLoader}>Load</button>
+
+            <button onclick={() => (open = true)} class="btn">Settings</button>
         </div>
 
         <div class="text">
@@ -41,6 +48,10 @@
         </div>
     </div>
 </div>
+
+<Modal bind:open onClose={() => (open = false)}>
+    <Settings />
+</Modal>
 
 <style>
     .text {
