@@ -37,8 +37,8 @@
         const { hash: readHash, error } = await addMarkdown(record);
 
         const now = new Date().toISOString(); // ISO 8601
-        const oldSize = text.length;
-        const newSize = markdown.length;
+        const oldSize = new TextEncoder().encode(text).length;
+        const newSize = new TextEncoder().encode(markdown).length;
         const metadata: MetadataRecord = {
             hash,
             title: "",

@@ -2,6 +2,7 @@
     import { deleteMarkdown, deleteMetadata, getAllMetadata } from "@/db";
     import type { MetadataRecord } from "@/db";
     import { navigateToLoad } from "@/router";
+    import { formatBytes } from "@/utils";
     import { onMount } from "svelte";
 
     let records: MetadataRecord[] = $state([]);
@@ -17,6 +18,18 @@
         records = records.filter((record) => record.hash !== hash);
     };
 
+    const getPercent = (record: MetadataRecord): string => {
+        if (!record.size_before) return "0%";
+        const percent =
+            ((record.size_before - record.size_after) / record.size_before) *
+            100;
+        return `${percent.toFixed(2)}%`;
+    };
+
+    const getRecordInfo = (record: MetadataRecord): string => {
+        return `Before: ${formatBytes(record.size_before)}\nAfter: ${formatBytes(record.size_after)} (${getPercent(record)})`;
+    };
+
     onMount(async () => {
         navigateToLoad();
 
@@ -26,6 +39,8 @@
 
 <div class="centerWrapper">
     <div class="centered">
+        <header class="pad">My documents</header>
+
         {#if records.length !== 0}
             <table>
                 <thead>
@@ -45,7 +60,7 @@
                 </tbody>
             </table>
         {:else}
-            <header>No documents found</header>
+            <p class="center">No documents found</p>
         {/if}
 
         <div class="buttons">
@@ -75,6 +90,8 @@
             <button onclick={() => handleDelete(record.hash)} class="btn">
                 Delete
             </button>
+
+            <span class="sub" title={getRecordInfo(record)}>Info</span>
         </td>
     </tr>
 {/snippet}
@@ -94,5 +111,18 @@
 
     .cursive {
         font-style: italic;
+    }
+
+    .pad {
+        padding: 20px;
+    }
+
+    .center {
+        text-align: center;
+    }
+
+    .sub {
+        margin-left: 3px;
+        font-size: 0.8rem;
     }
 </style>
