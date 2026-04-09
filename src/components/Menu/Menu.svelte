@@ -1,10 +1,14 @@
 <script lang="ts">
+    import { navigateToMain } from "@/router";
+
     let { openNew, openLoader } = $props<{
         openNew: (skip: boolean) => void;
         openLoader: () => void;
     }>();
 
     let skip = $state(false);
+
+    navigateToMain();
 </script>
 
 <div class="centerWrapper">

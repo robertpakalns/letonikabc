@@ -2,6 +2,7 @@
     import type { MDRecord, MetadataRecord } from "@/db";
     import { parse_html_to_markdown } from "@wasm/app";
     import { addMarkdown, addMetadata } from "@/db";
+    import { navigateToNew } from "@/router";
     import { onMount } from "svelte";
 
     const {
@@ -54,6 +55,8 @@
     };
 
     onMount(() => {
+        navigateToNew();
+
         if (skipManual) {
             requestFile();
         }

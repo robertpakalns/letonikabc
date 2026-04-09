@@ -1,6 +1,7 @@
 <script lang="ts">
     import { deleteMarkdown, deleteMetadata, getAllMetadata } from "@/db";
     import type { MetadataRecord } from "@/db";
+    import { navigateToLoad } from "@/router";
     import { onMount } from "svelte";
 
     let records: MetadataRecord[] = $state([]);
@@ -17,6 +18,8 @@
     };
 
     onMount(async () => {
+        navigateToLoad();
+
         records = await getAllMetadata();
     });
 </script>

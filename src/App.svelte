@@ -1,9 +1,9 @@
 <script lang="ts">
     import LoadDocument from "@/components/Menu/LoadDocument.svelte";
     import NewDocument from "@/components/Menu/NewDocument.svelte";
-    import { extractReadHash, updateReadPath } from "@/router";
     import Menu from "@/components/Menu/Menu.svelte";
     import Reader from "@/components/Reader.svelte";
+    import { parseRoute } from "@/router";
 
     type State = "menu" | "reader" | "load" | "new";
     let appState: State = $state<State>("menu");
@@ -20,8 +20,6 @@
         readHash = hash;
         appState = "reader";
         displayError = error;
-
-        updateReadPath(hash);
     };
 
     const openLoader = () => {
@@ -32,12 +30,13 @@
         appState = s;
     };
 
-    const hash = extractReadHash();
+    const parsed = parseRoute();
 
-    if (hash) {
-        readHash = hash;
-        appState = "reader";
+    if (parsed.route === "reader") {
+        readHash = parsed.hash;
     }
+
+    appState = parsed.route;
 </script>
 
 <div class="globalWrapper">

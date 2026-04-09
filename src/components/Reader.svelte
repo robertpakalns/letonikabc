@@ -1,5 +1,6 @@
 <script lang="ts">
     import { convert_parsed_markdown_to_html } from "@wasm/app";
+    import { updateReadPath } from "@/router";
     import { Errors } from "@/errorHandler";
     import { getMarkdown } from "@/db";
     import { onMount } from "svelte";
@@ -14,6 +15,8 @@
     let error = $state<string | undefined>();
 
     onMount(async () => {
+        updateReadPath(readHash);
+
         if (displayError) {
             error = displayError;
         }
