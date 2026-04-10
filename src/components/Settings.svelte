@@ -2,9 +2,9 @@
     type Font = "sans-serif" | "serif" | "monospace";
 
     const fonts: Record<Font, string> = {
-        "sans-serif": "Google Sans, sans-serif",
-        serif: "serif",
-        monospace: "monospace",
+        "sans-serif": "'Google Sans', sans-serif",
+        serif: "'Source Serif 4', serif",
+        monospace: "'Roboto Mono', monospace",
     };
 
     const changeFont = (type: Font): void => {
