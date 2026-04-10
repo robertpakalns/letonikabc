@@ -39,7 +39,7 @@
 
     .modal {
         position: relative;
-        background: white;
+        background: color-mix(in srgb, var(--bg) 80%, transparent);
         padding: 1rem;
         border-radius: 8px;
     }
