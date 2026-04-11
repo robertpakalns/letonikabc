@@ -131,7 +131,7 @@ header {
 }
 
 .btn {
-    padding: 8px 12px;
+    padding: 0.4rem 0.75rem;
     border-radius: 8px;
     outline: none;
     border: 1px solid var(--button-outline);

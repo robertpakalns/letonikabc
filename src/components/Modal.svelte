@@ -22,6 +22,10 @@
         >
             <button onclick={onClose} class="close">×</button>
             <slot />
+
+            <div class="btns">
+                <button class="btn" onclick={onClose}>Back</button>
+            </div>
         </div>
     </div>
 {/if}
@@ -56,6 +60,15 @@
 
         &:hover {
             transform: scale(1.3);
+        }
+    }
+
+    .btns {
+        display: flex;
+        justify-content: center;
+
+        .btn {
+            font-size: 0.7rem;
         }
     }
 </style>
