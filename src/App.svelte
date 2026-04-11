@@ -3,7 +3,10 @@
     import NewDocument from "@/components/Menu/NewDocument.svelte";
     import Menu from "@/components/Menu/Menu.svelte";
     import Reader from "@/components/Reader.svelte";
+    import { getSettings } from "@/storage";
     import { parseRoute } from "@/router";
+    import { applyFont } from "@/fonts";
+    import { onMount } from "svelte";
 
     type State = "menu" | "reader" | "load" | "new";
     let appState: State = $state<State>("menu");
@@ -37,6 +40,11 @@
     }
 
     appState = parsed.route;
+
+    onMount(() => {
+        const settings = getSettings();
+        applyFont(settings.font);
+    });
 </script>
 
 <div class="globalWrapper">

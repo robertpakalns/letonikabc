@@ -1,15 +1,21 @@
 <script lang="ts">
-    type Font = "sans-serif" | "serif" | "monospace";
+    import { getSettings, updateFont } from "@/storage";
+    import { applyFont, type Font } from "@/fonts";
+    import { onMount } from "svelte";
 
-    const fonts: Record<Font, string> = {
-        "sans-serif": "'Google Sans', sans-serif",
-        serif: "'Source Serif 4', serif",
-        monospace: "'Roboto Mono', monospace",
-    };
+    let currentFont: Font = "sans-serif";
 
     const changeFont = (type: Font): void => {
-        document.documentElement.style.setProperty("--font", fonts[type]);
+        currentFont = type;
+        applyFont(type);
+        updateFont(type);
     };
+
+    onMount(() => {
+        const settings = getSettings();
+        currentFont = settings.font;
+        applyFont(currentFont);
+    });
 </script>
 
 <div>

@@ -31,7 +31,9 @@
             </div>
 
             <button class="btn" onclick={openLoader}>Load</button>
+        </div>
 
+        <div class="buttons">
             <button onclick={() => (open = true)} class="btn">Settings</button>
         </div>
 
