@@ -1,33 +1,66 @@
 <script lang="ts">
-    import { getSettings, updateFont } from "@/storage";
+    import { updateFont, updateTheme } from "@/storage";
+    import { applyTheme, type Theme } from "@/themes";
     import { applyFont, type Font } from "@/fonts";
-    import { onMount } from "svelte";
-
-    let currentFont: Font = "sans-serif";
 
     const changeFont = (type: Font): void => {
-        currentFont = type;
         applyFont(type);
         updateFont(type);
     };
 
-    onMount(() => {
-        const settings = getSettings();
-        currentFont = settings.font;
-        applyFont(currentFont);
-    });
+    const changeTheme = (type: Theme): void => {
+        applyTheme(type);
+        updateTheme(type);
+    };
 </script>
 
 <div>
     <header>Settings</header>
 
-    <div class="buttons">
-        <button class="btn" onclick={() => changeFont("sans-serif")}>
-            Sans-serif
-        </button>
-        <button class="btn" onclick={() => changeFont("serif")}>Serif</button>
-        <button class="btn" onclick={() => changeFont("monospace")}>
-            Monospace
-        </button>
+    <div class="section">
+        <h3>Font</h3>
+        <div class="buttons">
+            <button class="btn" onclick={() => changeFont("sans-serif")}>
+                Sans-serif
+            </button>
+            <button class="btn" onclick={() => changeFont("serif")}>
+                Serif
+            </button>
+            <button class="btn" onclick={() => changeFont("monospace")}>
+                Monospace
+            </button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>Theme</h3>
+        <div class="buttons">
+            <button class="btn" onclick={() => changeTheme("system")}>
+                System
+            </button>
+            <button class="btn" onclick={() => changeTheme("dark")}>
+                Dark
+            </button>
+            <button class="btn" onclick={() => changeTheme("light")}>
+                Light
+            </button>
+        </div>
     </div>
 </div>
+
+<style>
+    h3 {
+        text-align: center;
+    }
+
+    .buttons {
+        margin: 5px 0 0 0;
+    }
+
+    .section {
+        margin: 10px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+</style>

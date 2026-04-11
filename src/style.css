@@ -68,7 +68,7 @@ body {
 
 /* Dark mode */
 @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme="light"]) {
         --bg: #282c33;
         --text: #dbdcde;
         --link: #cab95d;
@@ -76,6 +76,16 @@ body {
         --button-outline: #7a7a7a;
         --person: #6ab2ff;
     }
+}
+
+/* Dark mode override */
+:root[data-theme="dark"] {
+    --bg: #282c33;
+    --text: #dbdcde;
+    --link: #cab95d;
+    --button: #575757;
+    --button-outline: #7a7a7a;
+    --person: #6ab2ff;
 }
 
 /* Scrollbar */

@@ -5,6 +5,7 @@
     import Reader from "@/components/Reader.svelte";
     import { getSettings } from "@/storage";
     import { parseRoute } from "@/router";
+    import { applyTheme } from "./themes";
     import { applyFont } from "@/fonts";
     import { onMount } from "svelte";
 
@@ -44,6 +45,7 @@
     onMount(() => {
         const settings = getSettings();
         applyFont(settings.font);
+        applyTheme(settings.theme);
     });
 </script>
 
