@@ -69,7 +69,7 @@
         <ol>
             <li>
                 Get a raw document from
-                <a href="https://www.letonika.lv/" target="_blank">
+                <a href="https://www.letonika.lv" target="_blank">
                     letonika.lv
                 </a>
             </li>

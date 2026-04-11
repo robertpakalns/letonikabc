@@ -14,6 +14,14 @@
 
         <div class="text">
             <p>
+                A website where a user downloads a text file from
+                <a href="https://www.letonika.lv" target="_blank">
+                    letonika.lv
+                </a>
+                and uses it as an alternative reader.
+            </p>
+
+            <p>
                 Source code:
                 <a
                     href="https://github.com/robertpakalns/letonikabc"
@@ -30,6 +38,8 @@
 
 <style>
     .text {
+        max-width: 600px;
+        margin: 20px;
         display: flex;
         flex-direction: column;
         gap: 6px;

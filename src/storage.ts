@@ -1,5 +1,5 @@
-import { type Theme, isValidTheme } from "@/themes";
-import { type Font, isValidFont } from "@/fonts";
+import { type Theme, applyTheme, isValidTheme } from "@/themes";
+import { applyFont, type Font, isValidFont } from "@/fonts";
 
 const STORAGE_KEY = "settings";
 
@@ -40,4 +40,10 @@ export const updateTheme = (theme: Theme): void => {
   const settings = getSettings();
   settings.theme = theme;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+};
+
+export const applySettings = (): void => {
+  const settings = getSettings();
+  applyFont(settings.font);
+  applyTheme(settings.theme);
 };
