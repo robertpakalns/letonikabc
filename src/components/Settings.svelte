@@ -1,17 +1,29 @@
 <script lang="ts">
-    import { updateFont, updateTheme } from "@/storage";
+    import { getSettings, updateFont, updateTheme } from "@/storage";
     import { applyTheme, type Theme } from "@/themes";
     import { applyFont, type Font } from "@/fonts";
+    import { onMount } from "svelte";
+
+    let font: Font;
+    let theme: Theme;
 
     const changeFont = (type: Font): void => {
+        font = type;
         applyFont(type);
         updateFont(type);
     };
 
     const changeTheme = (type: Theme): void => {
+        theme = type;
         applyTheme(type);
         updateTheme(type);
     };
+
+    onMount(() => {
+        const settings = getSettings();
+        font = settings.font;
+        theme = settings.theme;
+    });
 </script>
 
 <div>
@@ -20,13 +32,27 @@
     <div class="section">
         <h3>Font</h3>
         <div class="buttons">
-            <button class="btn" onclick={() => changeFont("sans-serif")}>
+            <button
+                class="btn"
+                class:active={font === "sans-serif"}
+                onclick={() => changeFont("sans-serif")}
+            >
                 Sans-serif
             </button>
-            <button class="btn" onclick={() => changeFont("serif")}>
+
+            <button
+                class="btn"
+                class:active={font === "serif"}
+                onclick={() => changeFont("serif")}
+            >
                 Serif
             </button>
-            <button class="btn" onclick={() => changeFont("monospace")}>
+
+            <button
+                class="btn"
+                class:active={font === "monospace"}
+                onclick={() => changeFont("monospace")}
+            >
                 Monospace
             </button>
         </div>
@@ -35,13 +61,25 @@
     <div class="section">
         <h3>Theme</h3>
         <div class="buttons">
-            <button class="btn" onclick={() => changeTheme("system")}>
+            <button
+                class="btn"
+                class:active={theme === "system"}
+                onclick={() => changeTheme("system")}
+            >
                 System
             </button>
-            <button class="btn" onclick={() => changeTheme("dark")}>
+            <button
+                class="btn"
+                class:active={theme === "dark"}
+                onclick={() => changeTheme("dark")}
+            >
                 Dark
             </button>
-            <button class="btn" onclick={() => changeTheme("light")}>
+            <button
+                class="btn"
+                class:active={theme === "light"}
+                onclick={() => changeTheme("light")}
+            >
                 Light
             </button>
         </div>

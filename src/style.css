@@ -64,6 +64,9 @@ body {
     --button: #c3c3c3;
     --button-outline: #9c9c9c;
     --person: #0c74bb;
+    --button-active: #a8a8a8;
+    --button-outline-active: #7a7a7a;
+    --color-active: #000000;
 }
 
 /* Dark mode */
@@ -75,6 +78,9 @@ body {
         --button: #575757;
         --button-outline: #7a7a7a;
         --person: #6ab2ff;
+        --button-active: #333333;
+        --button-outline-active: #444444;
+        --color-active: #ffffff;
     }
 }
 
@@ -86,6 +92,9 @@ body {
     --button: #575757;
     --button-outline: #7a7a7a;
     --person: #6ab2ff;
+    --button-active: #333333;
+    --button-outline-active: #444444;
+    --color-active: #ffffff;
 }
 
 /* Scrollbar */
@@ -135,6 +144,12 @@ header {
 
     &:hover {
         transform: scale(1.1);
+    }
+
+    &.active {
+        background: var(--button-active);
+        border-color: var(--button-outline-active);
+        color: var(--color-active);
     }
 }
 
