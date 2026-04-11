@@ -8,6 +8,7 @@ export type Route =
   | { route: "menu" }
   | { route: "new" }
   | { route: "load" }
+  | { route: "about" }
   | { route: "reader"; hash: string };
 
 export const parseRoute = (): Route => {
@@ -21,6 +22,7 @@ export const parseRoute = (): Route => {
   if (parts.length === 0) return { route: "menu" };
   if (parts[0] === "new") return { route: "new" };
   if (parts[0] === "load") return { route: "load" };
+  if (parts[0] === "about") return { route: "about" };
 
   if (parts[0] === "read" && parts[1]) {
     return { route: "reader", hash: parts[1] };
@@ -43,4 +45,8 @@ export const navigateToMain = (): void => {
 
 export const navigateToLoad = (): void => {
   updateHistory("load");
+};
+
+export const navigateToAbout = (): void => {
+  updateHistory("about");
 };

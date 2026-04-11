@@ -1,6 +1,7 @@
 <script lang="ts">
     import LoadDocument from "@/components/Menu/LoadDocument.svelte";
     import NewDocument from "@/components/Menu/NewDocument.svelte";
+    import About from "@/components/Menu/About.svelte";
     import Menu from "@/components/Menu/Menu.svelte";
     import Reader from "@/components/Reader.svelte";
     import { getSettings } from "@/storage";
@@ -9,7 +10,7 @@
     import { applyFont } from "@/fonts";
     import { onMount } from "svelte";
 
-    type State = "menu" | "reader" | "load" | "new";
+    type State = "menu" | "reader" | "load" | "new" | "about";
     let appState: State = $state<State>("menu");
     let skipManual: boolean = $state<boolean>(false);
     let readHash: string = $state("");
@@ -28,6 +29,14 @@
 
     const openLoader = () => {
         appState = "load";
+    };
+
+    const aboutLoader = () => {
+        appState = "about";
+    };
+
+    const menuLoader = () => {
+        appState = "menu";
     };
 
     const changeState = (s: State) => {
@@ -51,7 +60,7 @@
 
 <div class="globalWrapper">
     {#if appState === "menu"}
-        <Menu openNew={(skip) => openReader(skip)} {openLoader} />
+        <Menu openNew={(skip) => openReader(skip)} {openLoader} {aboutLoader} />
     {:else if appState === "load"}
         <!-- goRead: no error by design -->
         <!-- openReader: no skip option -->
@@ -68,6 +77,8 @@
         />
     {:else if appState === "reader"}
         <Reader {readHash} goBack={() => changeState("menu")} {displayError} />
+    {:else if appState === "about"}
+        <About goBack={menuLoader} />
     {/if}
 </div>
 

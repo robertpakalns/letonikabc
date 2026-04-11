@@ -3,9 +3,10 @@
     import Modal from "@/components/Modal.svelte";
     import { navigateToMain } from "@/router";
 
-    let { openNew, openLoader } = $props<{
+    const { openNew, openLoader, aboutLoader } = $props<{
         openNew: (skip: boolean) => void;
         openLoader: () => void;
+        aboutLoader: () => void;
     }>();
 
     let skip = $state(false);
@@ -35,18 +36,7 @@
 
         <div class="buttons">
             <button onclick={() => (open = true)} class="btn">Settings</button>
-        </div>
-
-        <div class="text">
-            <p>
-                Source code:
-                <a
-                    href="https://github.com/robertpakalns/letonikabc"
-                    target="_blank"
-                >
-                    https://github.com/robertpakalns/letonikabc
-                </a>
-            </p>
+            <button onclick={aboutLoader} class="btn">About</button>
         </div>
     </div>
 </div>
@@ -56,12 +46,6 @@
 </Modal>
 
 <style>
-    .text {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-    }
-
     .btnWithCheckbox {
         display: flex;
         flex-direction: column;
