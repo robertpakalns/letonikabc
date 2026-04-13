@@ -1,8 +1,8 @@
 <script lang="ts">
     import { deleteMarkdown, deleteMetadata, getAllMetadata } from "@/db";
+    import { exportMarkdown, formatBytes } from "@/utils";
     import type { MetadataRecord } from "@/db";
     import { navigateToLoad } from "@/router";
-    import { formatBytes } from "@/utils";
     import { onMount } from "svelte";
 
     let records: MetadataRecord[] = $state([]);
@@ -86,12 +86,21 @@
         <td>{new Date(record.created_at).toLocaleDateString()}</td>
         <td>{new Date(record.edited_at).toLocaleDateString()}</td>
         <td>
-            <button onclick={() => goRead(record.hash)} class="btn">Go</button>
-            <button onclick={() => handleDelete(record.hash)} class="btn">
-                Delete
+            <button onclick={() => goRead(record.hash)} class="btn-wrap">
+                <img src="./icons/go.svg" alt="Go read" />
             </button>
-
-            <span class="sub" title={getRecordInfo(record)}>Info</span>
+            <button onclick={() => handleDelete(record.hash)} class="btn-wrap">
+                <img src="./icons/delete.svg" alt="Delete entry" />
+            </button>
+            <button title={getRecordInfo(record)} class="btn-wrap">
+                <img src="./icons/info.svg" alt="Information about entry" />
+            </button>
+            <button
+                onclick={() => exportMarkdown(record.hash)}
+                class="btn-wrap"
+            >
+                <img src="./icons/export.svg" alt="Export markdown" />
+            </button>
         </td>
     </tr>
 {/snippet}
@@ -121,8 +130,16 @@
         text-align: center;
     }
 
-    .sub {
-        margin-left: 3px;
-        font-size: 0.8rem;
+    .btn-wrap {
+        background: transparent;
+        border: none;
+        outline: none;
+        height: 20px;
+        cursor: pointer;
+        margin: 4px;
+
+        img {
+            height: 100%;
+        }
     }
 </style>
