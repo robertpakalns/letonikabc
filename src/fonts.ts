@@ -5,7 +5,7 @@ export const isValidFont = (font: Font): boolean => {
 };
 
 const fonts: Record<Font, string> = {
-  "sans-serif": "'Google Sans', sans-serif",
+  "sans-serif": "'Figtree', sans-serif",
   serif: "'Source Serif 4', serif",
   monospace: "'Roboto Mono', monospace",
 };
