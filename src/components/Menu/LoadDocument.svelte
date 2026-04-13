@@ -2,7 +2,7 @@
     import { deleteMarkdown, deleteMetadata, getAllMetadata } from "@/db";
     import { exportMarkdown, formatBytes } from "@/utils";
     import type { MetadataRecord } from "@/db";
-    import { navigateToLoad } from "@/router";
+    import { navigateToMy } from "@/router";
     import { onMount } from "svelte";
 
     let records: MetadataRecord[] = $state([]);
@@ -31,7 +31,7 @@
     };
 
     onMount(async () => {
-        navigateToLoad();
+        navigateToMy();
 
         records = await getAllMetadata();
     });
@@ -86,21 +86,26 @@
         <td>{new Date(record.created_at).toLocaleDateString()}</td>
         <td>{new Date(record.edited_at).toLocaleDateString()}</td>
         <td>
-            <button onclick={() => goRead(record.hash)} class="btn-wrap">
-                <img src="./icons/go.svg" alt="Go read" />
-            </button>
-            <button onclick={() => handleDelete(record.hash)} class="btn-wrap">
-                <img src="./icons/delete.svg" alt="Delete entry" />
-            </button>
-            <button title={getRecordInfo(record)} class="btn-wrap">
-                <img src="./icons/info.svg" alt="Information about entry" />
-            </button>
-            <button
-                onclick={() => exportMarkdown(record.hash)}
-                class="btn-wrap"
-            >
-                <img src="./icons/export.svg" alt="Export markdown" />
-            </button>
+            <div class="btns">
+                <button onclick={() => goRead(record.hash)} class="btn-wrap">
+                    <img src="./icons/go.svg" alt="Go read" />
+                </button>
+                <button
+                    onclick={() => handleDelete(record.hash)}
+                    class="btn-wrap"
+                >
+                    <img src="./icons/delete.svg" alt="Delete entry" />
+                </button>
+                <button title={getRecordInfo(record)} class="btn-wrap">
+                    <img src="./icons/info.svg" alt="Information about entry" />
+                </button>
+                <button
+                    onclick={() => exportMarkdown(record.hash)}
+                    class="btn-wrap"
+                >
+                    <img src="./icons/export.svg" alt="Export markdown" />
+                </button>
+            </div>
         </td>
     </tr>
 {/snippet}
@@ -116,6 +121,8 @@
 
     td {
         padding: 6px 10px;
+        white-space: normal; /* allow wrapping */
+        word-break: break-word; /* break long words */
     }
 
     .cursive {
@@ -123,7 +130,7 @@
     }
 
     .pad {
-        padding: 20px;
+        padding: 20px 0;
     }
 
     .center {
@@ -140,6 +147,13 @@
 
         img {
             height: 100%;
+        }
+    }
+
+    .btns {
+        @media (max-width: 600px) {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
         }
     }
 </style>

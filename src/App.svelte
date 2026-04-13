@@ -8,7 +8,7 @@
     import { parseRoute } from "@/router";
     import { onMount } from "svelte";
 
-    type State = "menu" | "reader" | "load" | "new" | "about";
+    type State = "menu" | "reader" | "my" | "new" | "about";
     let appState: State = $state<State>("menu");
     let skipManual: boolean = $state<boolean>(false);
     let readHash: string = $state("");
@@ -26,7 +26,7 @@
     };
 
     const openLoader = () => {
-        appState = "load";
+        appState = "my";
     };
 
     const aboutLoader = () => {
@@ -57,7 +57,7 @@
 <div class="globalWrapper">
     {#if appState === "menu"}
         <Menu openNew={(skip) => openReader(skip)} {openLoader} {aboutLoader} />
-    {:else if appState === "load"}
+    {:else if appState === "my"}
         <!-- goRead: no error by design -->
         <!-- openReader: no skip option -->
         <LoadDocument
