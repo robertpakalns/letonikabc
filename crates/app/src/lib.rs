@@ -5,7 +5,7 @@ use alloc::{string::String, vec::Vec};
 use wasm_bindgen::prelude::wasm_bindgen;
 use wee_alloc::WeeAlloc;
 
-use parser::{ParseOut, parse};
+use parser::{ParseOut, create_hash_from, parse};
 use reader::convert;
 
 /// The crate is built without the Rust standart library, which significantly reduces the binary size
@@ -54,4 +54,9 @@ impl ParseOutput {
     pub fn hash(&self) -> String {
         self.inner.hash.clone()
     }
+}
+
+#[wasm_bindgen]
+pub fn create_hash_from_markdown(md: &str) -> String {
+    create_hash_from(md)
 }

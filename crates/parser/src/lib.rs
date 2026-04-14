@@ -21,3 +21,5 @@ pub fn parse(html: &str) -> ParseOut {
         hash,
     }
 }
+
+pub use crate::parse_html::create_hash_from;

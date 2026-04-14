@@ -1,6 +1,9 @@
 <script lang="ts">
+    import {
+        parse_html_to_markdown,
+        create_hash_from_markdown,
+    } from "@wasm/app";
     import type { MDRecord, MetadataRecord } from "@/db";
-    import { parse_html_to_markdown } from "@wasm/app";
     import { addMarkdown, addMetadata } from "@/db";
     import { navigateToNew } from "@/router";
     import { onMount } from "svelte";
@@ -16,9 +19,13 @@
     }>();
 
     let fileInput: HTMLInputElement;
-
     const requestFile = () => {
         fileInput?.click();
+    };
+
+    let markdownInput: HTMLInputElement;
+    const requestMarkdownFile = () => {
+        markdownInput?.click();
     };
 
     const handleFileChange = async (event: Event): Promise<void> => {
@@ -54,6 +61,42 @@
         await goRead(readHash, error);
     };
 
+    const handleMarkdownFileChange = async (event: Event): Promise<void> => {
+        const input = event.target as HTMLInputElement;
+        const file = input.files?.[0];
+        if (!file) {
+            goBack();
+            return;
+        }
+
+        const markdown = await file.text();
+
+        const hash = create_hash_from_markdown(markdown);
+
+        const record: MDRecord = {
+            hash,
+            value: markdown,
+        };
+
+        const { hash: readHash, error } = await addMarkdown(record);
+
+        const now = new Date().toISOString();
+        const len = new TextEncoder().encode(markdown).length;
+        const metadata: MetadataRecord = {
+            hash,
+            title: "",
+            author: "",
+            size_before: len,
+            size_after: len,
+            created_at: now,
+            edited_at: now,
+            last_position: -1,
+        };
+        await addMetadata(metadata);
+
+        await goRead(readHash, error);
+    };
+
     onMount(() => {
         navigateToNew();
 
@@ -79,6 +122,7 @@
         </ol>
 
         <div class="buttons">
+            <button class="btn" onclick={requestMarkdownFile}>Import</button>
             <button class="btn" onclick={requestFile}>Open</button>
             <button class="btn" onclick={goBack}>Back</button>
         </div>
@@ -92,6 +136,15 @@
     hidden
     onchange={handleFileChange}
     oncancel={handleFileChange}
+/>
+
+<input
+    bind:this={markdownInput}
+    type="file"
+    accept=".md"
+    hidden
+    onchange={handleMarkdownFileChange}
+    oncancel={handleMarkdownFileChange}
 />
 
 <style>

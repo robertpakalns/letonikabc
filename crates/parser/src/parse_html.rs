@@ -158,11 +158,11 @@ pub fn parse(html: &str) -> (String, Vec<usize>, String) {
     );
 
     let md = lines.join("\n");
-    let hash = create_hash(&md);
+    let hash = create_hash_from(&md);
 
     (md, heading_lines, hash)
 }
 
-fn create_hash(md: &str) -> String {
+pub fn create_hash_from(md: &str) -> String {
     blake3::hash(md.as_bytes()).to_hex().to_string()
 }
