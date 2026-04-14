@@ -1,9 +1,33 @@
 <script lang="ts">
-    import { deleteMarkdown, deleteMetadata, getAllMetadata } from "@/db";
+    import {
+        deleteMarkdown,
+        deleteMetadata,
+        getAllMetadata,
+        updateMetadata,
+    } from "@/db";
     import { exportMarkdown, formatBytes } from "@/utils";
     import type { MetadataRecord } from "@/db";
     import { navigateToMy } from "@/router";
     import { onMount } from "svelte";
+
+    let editingHash: string | null = $state(null);
+    let draft: MetadataRecord | null = $state(null);
+
+    const commitEdit = async () => {
+        if (!draft || !editingHash) return;
+
+        const updated: MetadataRecord = {
+            ...draft,
+            edited_at: new Date().toISOString(),
+        };
+
+        await updateMetadata(updated);
+
+        records = records.map((r) => (r.hash === updated.hash ? updated : r));
+
+        draft = null;
+        editingHash = null;
+    };
 
     let records: MetadataRecord[] = $state([]);
     const { goBack, goRead, openReader } = $props<{
@@ -30,10 +54,55 @@
         return `Before: ${formatBytes(record.size_before)}\nAfter: ${formatBytes(record.size_after)} (${getPercent(record)})`;
     };
 
-    onMount(async () => {
+    const handleGlobalClick = (event: MouseEvent) => {
+        if (!editingHash) return;
+
+        const target = event.target as HTMLElement;
+
+        const editingEl = document.querySelector(
+            `[data-editing="${editingHash}"]`,
+        );
+
+        if (!editingEl) return;
+        if (editingEl.contains(target)) return;
+
+        commitEdit();
+    };
+
+    const switchEdit = (record: MetadataRecord) => {
+        if (editingHash === record.hash) return;
+
+        if (draft && editingHash) {
+            const updated: MetadataRecord = {
+                ...draft,
+                edited_at: new Date().toISOString(),
+            };
+
+            updateMetadata(updated);
+
+            records = records.map((r) =>
+                r.hash === updated.hash ? updated : r,
+            );
+        }
+
+        editingHash = record.hash;
+        draft = JSON.parse(JSON.stringify(record));
+    };
+
+    onMount(() => {
         navigateToMy();
 
-        records = await getAllMetadata();
+        const load = async () => {
+            records = await getAllMetadata();
+        };
+
+        load();
+
+        document.addEventListener("mousedown", handleGlobalClick);
+
+        return () => {
+            document.removeEventListener("mousedown", handleGlobalClick);
+        };
     });
 </script>
 
@@ -71,24 +140,35 @@
 </div>
 
 {#snippet row(record: MetadataRecord, i: number)}
-    <tr>
+    <tr data-editing={editingHash === record.hash ? record.hash : undefined}>
         <td>{i + 1}</td>
-        {#if record.title}
-            <td>{record.title}</td>
-        {:else}
-            <td class="cursive">No title</td>
-        {/if}
-        {#if record.author}
-            <td>{record.author}</td>
-        {:else}
-            <td class="cursive">No author</td>
-        {/if}
+        <td>
+            {#if editingHash === record.hash && draft}
+                <input type="text" bind:value={draft.title} />
+            {:else if record.title}
+                {record.title}
+            {:else}
+                <span class="cursive">No title</span>
+            {/if}
+        </td>
+        <td>
+            {#if editingHash === record.hash && draft}
+                <input type="text" bind:value={draft.author} />
+            {:else if record.author}
+                {record.author}
+            {:else}
+                <span class="cursive">No author</span>
+            {/if}
+        </td>
         <td>{new Date(record.created_at).toLocaleDateString()}</td>
         <td>{new Date(record.edited_at).toLocaleDateString()}</td>
         <td>
             <div class="btns">
                 <button onclick={() => goRead(record.hash)} class="btn-wrap">
                     <img src="./icons/go.svg" alt="Go read" />
+                </button>
+                <button onclick={() => switchEdit(record)} class="btn-wrap">
+                    <img src="./icons/edit.svg" alt="Edit entry" />
                 </button>
                 <button
                     onclick={() => handleDelete(record.hash)}
@@ -121,8 +201,8 @@
 
     td {
         padding: 6px 10px;
-        white-space: normal; /* allow wrapping */
-        word-break: break-word; /* break long words */
+        white-space: normal;
+        word-break: break-word;
     }
 
     .cursive {
@@ -155,5 +235,13 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
         }
+    }
+
+    input {
+        outline: none;
+        border: none;
+        background: transparent;
+        border-bottom: 1px solid gray;
+        width: 100%;
     }
 </style>
