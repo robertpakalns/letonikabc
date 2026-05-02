@@ -9,6 +9,8 @@ const isValidFont = (font: Font): boolean =>
 const isValidTheme = (theme: Theme): boolean =>
   theme === "system" || theme === "dark" || theme === "light";
 const isValidBGColor = (color: BGColor): boolean => {
+  if (color === "default") return true;
+
   const s = new Option().style;
   s.color = color;
   return s.color !== "";
@@ -33,14 +35,11 @@ export const applyTheme = (theme: Theme) => {
   }
 };
 export const applyBGColor = (c: BGColor) => {
-  let color =
-    c === "default"
-      ? getComputedStyle(document.documentElement)
-          .getPropertyValue("--bg")
-          .trim()
-      : c;
-
-  document.documentElement.style.setProperty("--bg", color);
+  if (c === "default") {
+    document.documentElement.style.removeProperty("--bg");
+  } else {
+    document.documentElement.style.setProperty("--bg", c);
+  }
 };
 
 // Update localStorage
@@ -75,7 +74,7 @@ type Settings = {
   bgColor: BGColor;
 };
 
-const defaultSettings = (): Settings => ({
+export const defaultSettings = (): Settings => ({
   font: "sans-serif",
   theme: "system",
   bgColor: "default",
@@ -108,4 +107,13 @@ export const applySettings = (): void => {
   applyFont(settings.font);
   applyTheme(settings.theme);
   applyBGColor(settings.bgColor);
+};
+
+export const resetSettings = (): void => {
+  const settings = defaultSettings();
+  applyFont(settings.font);
+  applyTheme(settings.theme);
+  applyBGColor(settings.bgColor);
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
 };

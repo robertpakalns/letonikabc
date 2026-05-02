@@ -5,6 +5,8 @@
         updateTheme,
         updateBGColor,
         applyBGColor,
+        resetSettings,
+        defaultSettings,
     } from "@/settings";
     import type { Theme, Font, BGColor } from "@/settings";
 
@@ -22,6 +24,11 @@
         theme = type;
         updateTheme(type);
     };
+
+    const changeBGColor = (c: BGColor): void => {
+        updateBGColor(c);
+        bgColor = chooseColor(c);
+    };
     const onBGColorInput = (e: Event): void => {
         bgColor = (e.target as HTMLInputElement).value;
         applyBGColor(bgColor);
@@ -30,11 +37,29 @@
         bgColor = (e.target as HTMLInputElement).value;
         updateBGColor(bgColor);
     };
+    const chooseColor = (c: string): BGColor =>
+        c === "default"
+            ? getComputedStyle(document.documentElement)
+                  .getPropertyValue("--bg")
+                  .trim()
+            : c;
+
+    const reset = (): void => {
+        resetSettings();
+
+        const settings = defaultSettings();
+        font = settings.font;
+        theme = settings.theme;
+        bgColor = chooseColor(settings.bgColor);
+
+        console.log(bgColor);
+    };
 
     onMount(() => {
         const settings = getSettings();
         font = settings.font;
         theme = settings.theme;
+        bgColor = chooseColor(settings.bgColor);
     });
 </script>
 
@@ -101,10 +126,26 @@
         <h3>Background Color</h3>
         <div class="buttons">
             <input
+                class="color-input"
                 type="color"
+                bind:value={bgColor}
                 oninput={onBGColorInput}
                 onfocusout={onBGColorFocusout}
             />
+
+            <button
+                class="btn"
+                class:active={bgColor === "default"}
+                onclick={() => changeBGColor("default")}
+            >
+                Default
+            </button>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="buttons">
+            <button class="btn" onclick={reset}>Reset</button>
         </div>
     </div>
 </div>
@@ -116,6 +157,8 @@
 
     .buttons {
         margin: 5px 0 0 0;
+        display: flex;
+        align-items: center;
     }
 
     .section {
@@ -123,5 +166,9 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+
+    .color-input {
+        height: 1.5rem;
     }
 </style>
