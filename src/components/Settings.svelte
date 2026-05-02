@@ -1,20 +1,34 @@
 <script lang="ts">
-    import { getSettings, updateFont, updateTheme } from "@/settings";
-    import type { Theme, Font } from "@/settings";
+    import {
+        getSettings,
+        updateFont,
+        updateTheme,
+        updateBGColor,
+        applyBGColor,
+    } from "@/settings";
+    import type { Theme, Font, BGColor } from "@/settings";
 
     import { onMount } from "svelte";
 
     let font: Font;
     let theme: Theme;
+    let bgColor: BGColor;
 
     const changeFont = (type: Font): void => {
         font = type;
         updateFont(type);
     };
-
     const changeTheme = (type: Theme): void => {
         theme = type;
         updateTheme(type);
+    };
+    const onBGColorInput = (e: Event): void => {
+        bgColor = (e.target as HTMLInputElement).value;
+        applyBGColor(bgColor);
+    };
+    const onBGColorFocusout = (e: Event): void => {
+        bgColor = (e.target as HTMLInputElement).value;
+        updateBGColor(bgColor);
     };
 
     onMount(() => {
@@ -80,6 +94,17 @@
             >
                 Light
             </button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>Background Color</h3>
+        <div class="buttons">
+            <input
+                type="color"
+                oninput={onBGColorInput}
+                onfocusout={onBGColorFocusout}
+            />
         </div>
     </div>
 </div>
