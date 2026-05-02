@@ -170,5 +170,6 @@
 
     .color-input {
         height: 1.5rem;
+        cursor: pointer;
     }
 </style>

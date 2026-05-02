@@ -5,7 +5,7 @@ use alloc::{string::String, vec::Vec};
 use wasm_bindgen::prelude::wasm_bindgen;
 use wee_alloc::WeeAlloc;
 
-use parser::{ParseOut, create_hash_from, parse};
+use parser::{HtmlOut, create_hash_from, parse};
 use reader::convert;
 
 /// The crate is built without the Rust standart library, which significantly reduces the binary size
@@ -22,7 +22,7 @@ static ALLOC: WeeAlloc = WeeAlloc::INIT;
 
 // WASM bindings
 #[wasm_bindgen]
-pub fn parse_html_to_markdown(html: String) -> ParseOutput {
+pub fn parse_html(html: String) -> ParseOutput {
     ParseOutput {
         inner: parse(&html),
     }
@@ -35,7 +35,7 @@ pub fn convert_parsed_markdown_to_html(md: String) -> String {
 
 #[wasm_bindgen]
 pub struct ParseOutput {
-    inner: ParseOut,
+    inner: HtmlOut,
 }
 
 #[wasm_bindgen]

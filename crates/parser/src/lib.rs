@@ -1,25 +1,12 @@
 #![no_std]
 extern crate alloc;
 
-use alloc::{string::String, vec::Vec};
-
 mod parse_html;
 mod tests;
 
-pub struct ParseOut {
-    pub markdown: String,
-    pub heading_lines: Vec<usize>,
-    pub hash: String,
-}
-
-pub fn parse(html: &str) -> ParseOut {
-    let (markdown, heading_lines, hash) = parse_html::parse(html);
-
-    ParseOut {
-        markdown,
-        heading_lines,
-        hash,
-    }
-}
-
 pub use crate::parse_html::create_hash_from;
+pub use parse_html::HtmlOut;
+
+pub fn parse(html: &str) -> HtmlOut {
+    parse_html::parse(html)
+}

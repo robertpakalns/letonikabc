@@ -1,8 +1,5 @@
 <script lang="ts">
-    import {
-        parse_html_to_markdown,
-        create_hash_from_markdown,
-    } from "@wasm/app";
+    import { parse_html, create_hash_from_markdown } from "@wasm/app";
     import type { MDRecord, MetadataRecord } from "@/db";
     import { addMarkdown, addMetadata } from "@/db";
     import { navigateToNew } from "@/router";
@@ -37,7 +34,7 @@
         }
 
         const text: string = await file.text();
-        const mdData = parse_html_to_markdown(text);
+        const mdData = parse_html(text);
         const { markdown, hash, heading_lines } = mdData;
 
         const record: MDRecord = { hash, value: markdown };

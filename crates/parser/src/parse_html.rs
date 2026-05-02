@@ -11,6 +11,7 @@ fn flush_buffer(
     buffer: &mut String,
     lines: &mut Vec<String>,
     heading_lines: &mut Vec<usize>,
+    headings: &mut Vec<String>,
 ) {
     if let Some(el) = element_state.take() {
         let text = buffer.trim();
@@ -18,6 +19,7 @@ fn flush_buffer(
             match el {
                 El::Paragraph => lines.push(text.to_string()),
                 El::Heading(level) => {
+                    headings.push(text.to_string());
                     lines.push(format!("{} {}", "#".repeat(level), text));
                     heading_lines.push(lines.len());
                 }
@@ -31,20 +33,28 @@ fn start_element(
     state: &mut Option<El>,
     buffer: &mut String,
     lines: &mut Vec<String>,
-    headings: &mut Vec<usize>,
+    heading_lines: &mut Vec<usize>,
+    headings: &mut Vec<String>,
     el: El,
 ) {
-    flush_buffer(state, buffer, lines, headings);
+    flush_buffer(state, buffer, lines, heading_lines, headings);
     *state = Some(el);
 }
 
-pub fn parse(html: &str) -> (String, Vec<usize>, String) {
-    let mut chars = html.chars().peekable();
+// TODO: expand the El::Heading struct to accept line: usize and content: String
+pub struct HtmlOut {
+    pub markdown: String,
+    pub heading_lines: Vec<usize>,
+    pub headings: Vec<String>,
+    pub hash: String,
+}
 
+pub fn parse(html: &str) -> HtmlOut {
+    let mut chars = html.chars().peekable();
     let mut buffer = String::new();
     let mut lines = Vec::new();
     let mut heading_lines = Vec::new();
-
+    let mut headings = Vec::new();
     let mut element_state: Option<El> = None;
     let mut span_stack: Vec<bool> = Vec::new();
     let mut italic_depth = 0;
@@ -89,6 +99,7 @@ pub fn parse(html: &str) -> (String, Vec<usize>, String) {
                 &mut buffer,
                 &mut lines,
                 &mut heading_lines,
+                &mut headings,
             ),
             (true, "span") if !span_stack.is_empty() => {
                 let was_highlight = span_stack.pop().unwrap_or(false);
@@ -106,6 +117,7 @@ pub fn parse(html: &str) -> (String, Vec<usize>, String) {
                 &mut buffer,
                 &mut lines,
                 &mut heading_lines,
+                &mut headings,
                 El::Paragraph,
             ),
             // h1..h6
@@ -117,6 +129,7 @@ pub fn parse(html: &str) -> (String, Vec<usize>, String) {
                     &mut buffer,
                     &mut lines,
                     &mut heading_lines,
+                    &mut headings, // Add this
                     El::Heading(level),
                 );
             }
@@ -155,12 +168,18 @@ pub fn parse(html: &str) -> (String, Vec<usize>, String) {
         &mut buffer,
         &mut lines,
         &mut heading_lines,
+        &mut headings,
     );
 
-    let md = lines.join("\n");
-    let hash = create_hash_from(&md);
+    let markdown = lines.join("\n");
+    let hash = create_hash_from(&markdown);
 
-    (md, heading_lines, hash)
+    HtmlOut {
+        markdown,
+        heading_lines,
+        headings,
+        hash,
+    }
 }
 
 pub fn create_hash_from(md: &str) -> String {
