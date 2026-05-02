@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { getSettings, updateFont, updateTheme } from "@/storage";
-    import { applyTheme, type Theme } from "@/themes";
-    import { applyFont, type Font } from "@/fonts";
+    import { getSettings, updateFont, updateTheme } from "@/settings";
+    import type { Theme, Font } from "@/settings";
+
     import { onMount } from "svelte";
 
     let font: Font;
@@ -9,13 +9,11 @@
 
     const changeFont = (type: Font): void => {
         font = type;
-        applyFont(type);
         updateFont(type);
     };
 
     const changeTheme = (type: Theme): void => {
         theme = type;
-        applyTheme(type);
         updateTheme(type);
     };
 

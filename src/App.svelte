@@ -4,7 +4,7 @@
     import About from "@/components/Menu/About.svelte";
     import Menu from "@/components/Menu/Menu.svelte";
     import Reader from "@/components/Reader.svelte";
-    import { applySettings } from "@/storage";
+    import { applySettings } from "@/settings";
     import { parseRoute } from "@/router";
     import { onMount } from "svelte";
 
