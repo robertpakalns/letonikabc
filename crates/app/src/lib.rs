@@ -6,7 +6,7 @@ use wasm_bindgen::prelude::wasm_bindgen;
 use wee_alloc::WeeAlloc;
 
 use parser::{HtmlOut, create_hash_from, parse};
-use reader::convert;
+use reader::{MdOut, convert};
 
 /// The crate is built without the Rust standart library, which significantly reduces the binary size
 ///
@@ -22,24 +22,26 @@ static ALLOC: WeeAlloc = WeeAlloc::INIT;
 
 // WASM bindings
 #[wasm_bindgen]
-pub fn parse_html(html: String) -> ParseOutput {
-    ParseOutput {
+pub fn parse_html(html: String) -> HtmlOutput {
+    HtmlOutput {
         inner: parse(&html),
     }
 }
 
 #[wasm_bindgen]
-pub fn convert_parsed_markdown_to_html(md: String) -> String {
-    convert(md)
+pub fn parse_md(md: String) -> MdOutput {
+    MdOutput {
+        inner: convert(&md),
+    }
 }
 
 #[wasm_bindgen]
-pub struct ParseOutput {
+pub struct HtmlOutput {
     inner: HtmlOut,
 }
 
 #[wasm_bindgen]
-impl ParseOutput {
+impl HtmlOutput {
     #[wasm_bindgen(getter)]
     pub fn markdown(&self) -> String {
         self.inner.markdown.clone()
@@ -69,4 +71,32 @@ impl ParseOutput {
 #[wasm_bindgen]
 pub fn create_hash_from_markdown(md: &str) -> String {
     create_hash_from(md)
+}
+
+#[wasm_bindgen]
+pub struct MdOutput {
+    inner: MdOut,
+}
+
+#[wasm_bindgen]
+impl MdOutput {
+    #[wasm_bindgen(getter)]
+    pub fn html(&self) -> String {
+        self.inner.html.clone()
+    }
+
+    #[wasm_bindgen(getter)]
+    pub fn heading_lines(&self) -> Vec<usize> {
+        self.inner.heading_lines.clone()
+    }
+
+    #[wasm_bindgen(getter)]
+    pub fn heading_contents(&self) -> Vec<String> {
+        self.inner.heading_contents.clone()
+    }
+
+    #[wasm_bindgen(getter)]
+    pub fn heading_levels(&self) -> Vec<usize> {
+        self.inner.heading_levels.clone()
+    }
 }

@@ -113,6 +113,8 @@ fn flush_buffer(
     buffer: &mut String,
     lines: &mut Vec<String>,
     heading_lines: &mut Vec<usize>,
+    heading_contents: &mut Vec<String>,
+    heading_levels: &mut Vec<usize>,
 ) {
     if let Some(el) = element_state.take() {
         let text = buffer.trim();
@@ -126,7 +128,10 @@ fn flush_buffer(
                 }
                 El::Heading(level) => {
                     lines.push(format!("<h{level}>{}</h{level}>", text));
-                    heading_lines.push(lines.len() - 1);
+
+                    heading_lines.push(lines.len());
+                    heading_contents.push(text.clone());
+                    heading_levels.push(level);
                 }
             }
         }
@@ -134,12 +139,22 @@ fn flush_buffer(
     }
 }
 
-pub fn convert(md: &str) -> String {
+pub struct MdOut {
+    pub html: String,
+    pub heading_lines: Vec<usize>,
+    pub heading_contents: Vec<String>,
+    pub heading_levels: Vec<usize>,
+}
+
+pub fn convert(md: &str) -> MdOut {
     let mut html = String::new();
     let mut element_state: Option<El> = None;
     let mut buffer = String::new();
     let mut lines = Vec::new();
+
     let mut heading_lines = Vec::new();
+    let mut heading_contents = Vec::new();
+    let mut heading_levels = Vec::new();
 
     for line in md.lines() {
         let trimmed = line.trim();
@@ -151,6 +166,8 @@ pub fn convert(md: &str) -> String {
                 &mut buffer,
                 &mut lines,
                 &mut heading_lines,
+                &mut heading_contents,
+                &mut heading_levels,
             );
             continue;
         }
@@ -171,7 +188,10 @@ pub fn convert(md: &str) -> String {
                 &mut buffer,
                 &mut lines,
                 &mut heading_lines,
+                &mut heading_contents,
+                &mut heading_levels,
             );
+
             let level = count.min(6);
             element_state = Some(El::Heading(level));
             buffer.push_str(&trimmed[count + 1..]);
@@ -184,7 +204,10 @@ pub fn convert(md: &str) -> String {
             &mut buffer,
             &mut lines,
             &mut heading_lines,
+            &mut heading_contents,
+            &mut heading_levels,
         );
+
         element_state = Some(El::Paragraph);
         buffer.push_str(trimmed);
     }
@@ -194,11 +217,18 @@ pub fn convert(md: &str) -> String {
         &mut buffer,
         &mut lines,
         &mut heading_lines,
+        &mut heading_contents,
+        &mut heading_levels,
     );
 
     for line in lines {
         html.push_str(&line);
     }
 
-    html
+    MdOut {
+        html,
+        heading_lines,
+        heading_contents,
+        heading_levels,
+    }
 }

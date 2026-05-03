@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { convert_parsed_markdown_to_html } from "@wasm/app";
+    import { parse_md } from "@wasm/app";
     import { updateReadPath } from "@/router";
     import { Errors } from "@/errorHandler";
     import { getMarkdown, getHeadings, type Heading } from "@/db";
@@ -36,7 +36,9 @@
         const headingsRecord = await getHeadings(readHash);
         headings = headingsRecord?.headings;
 
-        const html = convert_parsed_markdown_to_html(data.value);
+        const { html, heading_levels, heading_lines, heading_contents } =
+            parse_md(data.value);
+
         content = html;
     });
 </script>
