@@ -24,8 +24,6 @@ utils = { path = "crates/utils" }
 
 # External
 blake3 = { version = "1.8.5", default-features = false }
-wasm-bindgen = { version = "0.2.120", default-features = false }
-web-sys = { version = "0.3.97", default-features = false, features = [
-  "console",
-] }
+wasm-bindgen = { version = "=0.2.118", default-features = false }
+web-sys = { version = "=0.3.95", default-features = false, features = ["console"] }
 wee_alloc = { version = "0.4.5", default-features = false }
