@@ -6,56 +6,26 @@ use alloc::{
 
 use utils::El;
 
-fn flush_buffer(
-    element_state: &mut Option<El>,
-    buffer: &mut String,
-    lines: &mut Vec<String>,
-    heading_lines: &mut Vec<usize>,
-    heading_contents: &mut Vec<String>,
-    heading_levels: &mut Vec<usize>,
-) {
+fn flush_buffer(element_state: &mut Option<El>, buffer: &mut String, lines: &mut Vec<String>) {
     if let Some(el) = element_state.take() {
         let text = buffer.trim();
         if !text.is_empty() {
             match el {
                 El::Paragraph => lines.push(text.to_string()),
-                El::Heading(level) => {
-                    heading_levels.push(level);
-                    heading_contents.push(text.to_string());
-                    lines.push(format!("{} {}", "#".repeat(level), text));
-                    heading_lines.push(lines.len());
-                }
+                El::Heading(level) => lines.push(format!("{} {}", "#".repeat(level), text)),
             }
         }
         buffer.clear();
     }
 }
 
-fn start_element(
-    state: &mut Option<El>,
-    buffer: &mut String,
-    lines: &mut Vec<String>,
-    heading_lines: &mut Vec<usize>,
-    heading_contents: &mut Vec<String>,
-    heading_levels: &mut Vec<usize>,
-    el: El,
-) {
-    flush_buffer(
-        state,
-        buffer,
-        lines,
-        heading_lines,
-        heading_contents,
-        heading_levels,
-    );
+fn start_element(state: &mut Option<El>, buffer: &mut String, lines: &mut Vec<String>, el: El) {
+    flush_buffer(state, buffer, lines);
     *state = Some(el);
 }
 
 pub struct HtmlOut {
     pub markdown: String,
-    pub heading_lines: Vec<usize>,
-    pub heading_contents: Vec<String>,
-    pub heading_levels: Vec<usize>,
     pub hash: String,
 }
 
@@ -63,10 +33,6 @@ pub fn parse(html: &str) -> HtmlOut {
     let mut chars = html.chars().peekable();
     let mut buffer = String::new();
     let mut lines = Vec::new();
-
-    let mut heading_lines = Vec::new();
-    let mut heading_contents = Vec::new();
-    let mut heading_levels = Vec::new();
 
     let mut element_state: Option<El> = None;
     let mut span_stack: Vec<bool> = Vec::new();
@@ -107,14 +73,9 @@ pub fn parse(html: &str) -> HtmlOut {
             .to_lowercase();
 
         match (end, name.as_str()) {
-            (true, "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6") => flush_buffer(
-                &mut element_state,
-                &mut buffer,
-                &mut lines,
-                &mut heading_lines,
-                &mut heading_contents,
-                &mut heading_levels,
-            ),
+            (true, "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6") => {
+                flush_buffer(&mut element_state, &mut buffer, &mut lines)
+            }
             (true, "span") if !span_stack.is_empty() => {
                 let was_highlight = span_stack.pop().unwrap_or(false);
                 if !was_highlight {
@@ -126,15 +87,9 @@ pub fn parse(html: &str) -> HtmlOut {
                 buffer.push('_');
             }
 
-            (false, "p") => start_element(
-                &mut element_state,
-                &mut buffer,
-                &mut lines,
-                &mut heading_lines,
-                &mut heading_contents,
-                &mut heading_levels,
-                El::Paragraph,
-            ),
+            (false, "p") => {
+                start_element(&mut element_state, &mut buffer, &mut lines, El::Paragraph)
+            }
             // h1..h6
             (false, name @ ("h1" | "h2" | "h3" | "h4" | "h5" | "h6")) => {
                 let level = name[1..].parse::<usize>().unwrap_or(6);
@@ -143,9 +98,6 @@ pub fn parse(html: &str) -> HtmlOut {
                     &mut element_state,
                     &mut buffer,
                     &mut lines,
-                    &mut heading_lines,
-                    &mut heading_contents,
-                    &mut heading_levels,
                     El::Heading(level),
                 );
             }
@@ -179,25 +131,12 @@ pub fn parse(html: &str) -> HtmlOut {
         }
     }
 
-    flush_buffer(
-        &mut element_state,
-        &mut buffer,
-        &mut lines,
-        &mut heading_lines,
-        &mut heading_contents,
-        &mut heading_levels,
-    );
+    flush_buffer(&mut element_state, &mut buffer, &mut lines);
 
     let markdown = lines.join("\n");
     let hash = create_hash_from(&markdown);
 
-    HtmlOut {
-        markdown,
-        heading_lines,
-        heading_contents,
-        heading_levels,
-        hash,
-    }
+    HtmlOut { markdown, hash }
 }
 
 pub fn create_hash_from(md: &str) -> String {

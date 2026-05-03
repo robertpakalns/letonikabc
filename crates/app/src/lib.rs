@@ -48,21 +48,6 @@ impl HtmlOutput {
     }
 
     #[wasm_bindgen(getter)]
-    pub fn heading_lines(&self) -> Vec<usize> {
-        self.inner.heading_lines.clone()
-    }
-
-    #[wasm_bindgen(getter)]
-    pub fn heading_contents(&self) -> Vec<String> {
-        self.inner.heading_contents.clone()
-    }
-
-    #[wasm_bindgen(getter)]
-    pub fn heading_levels(&self) -> Vec<usize> {
-        self.inner.heading_levels.clone()
-    }
-
-    #[wasm_bindgen(getter)]
     pub fn hash(&self) -> String {
         self.inner.hash.clone()
     }

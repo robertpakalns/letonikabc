@@ -1,8 +1,9 @@
 <script lang="ts">
-    import { parse_md } from "@wasm/app";
+    import { getMarkdown, getHeadings, addHeadings } from "@/db";
     import { updateReadPath } from "@/router";
     import { Errors } from "@/errorHandler";
-    import { getMarkdown, getHeadings, type Heading } from "@/db";
+    import { parse_md } from "@wasm/app";
+    import type { Heading } from "@/db";
     import { onMount } from "svelte";
 
     const { goBack, readHash, displayError } = $props<{
@@ -38,6 +39,16 @@
 
         const { html, heading_levels, heading_lines, heading_contents } =
             parse_md(data.value);
+
+        const headingsArr: Heading[] = Array.from(heading_lines).map(
+            (line, i) => ({
+                line,
+                content: heading_contents[i],
+                level: heading_levels[i],
+            }),
+        );
+
+        await addHeadings({ hash: readHash, headings: headingsArr });
 
         content = html;
     });

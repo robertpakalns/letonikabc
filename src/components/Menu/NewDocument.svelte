@@ -1,7 +1,7 @@
 <script lang="ts">
     import { parse_html, create_hash_from_markdown } from "@wasm/app";
-    import type { Heading, MDRecord, MetadataRecord } from "@/db";
-    import { addHeadings, addMarkdown, addMetadata } from "@/db";
+    import type { MDRecord, MetadataRecord } from "@/db";
+    import { addMarkdown, addMetadata } from "@/db";
     import { navigateToNew } from "@/router";
     import { onMount } from "svelte";
 
@@ -35,23 +35,7 @@
 
         const text: string = await file.text();
         const mdData = parse_html(text);
-        const {
-            markdown,
-            hash,
-            heading_lines,
-            heading_contents,
-            heading_levels,
-        } = mdData;
-
-        const headings: Heading[] = Array.from(heading_lines).map(
-            (line, i) => ({
-                line,
-                content: heading_contents[i],
-                level: heading_levels[i],
-            }),
-        );
-
-        await addHeadings({ hash, headings });
+        const { markdown, hash } = mdData;
 
         const record: MDRecord = { hash, value: markdown };
         const { hash: readHash, error } = await addMarkdown(record);
