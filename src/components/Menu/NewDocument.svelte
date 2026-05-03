@@ -35,7 +35,13 @@
 
         const text: string = await file.text();
         const mdData = parse_html(text);
-        const { markdown, hash, heading_lines } = mdData;
+        const {
+            markdown,
+            hash,
+            heading_lines,
+            heading_contents,
+            heading_levels,
+        } = mdData;
 
         const record: MDRecord = { hash, value: markdown };
         const { hash: readHash, error } = await addMarkdown(record);

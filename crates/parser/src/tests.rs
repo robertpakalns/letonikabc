@@ -9,11 +9,13 @@ mod tests {
     fn simple_paragraph() {
         let html = "<p>Hello World!</p>";
         let HtmlOut {
-            markdown, headings, ..
+            markdown,
+            heading_contents,
+            ..
         } = parse(html);
 
         assert_eq!(markdown, "Hello World!");
-        assert!(headings.is_empty());
+        assert!(heading_contents.is_empty());
     }
 
     #[test]
@@ -49,14 +51,16 @@ mod tests {
         let html = "<h1>Title</h1><h2>Subtitle</h2><p>Text</p>";
         let HtmlOut {
             markdown,
-            headings,
+            heading_contents,
             heading_lines,
+            heading_levels,
             ..
         } = parse(html);
 
         assert_eq!(markdown, "# Title\n## Subtitle\nText");
-        assert_eq!(headings, vec!["Title", "Subtitle"]);
+        assert_eq!(heading_contents, vec!["Title", "Subtitle"]);
         assert_eq!(heading_lines, vec![1, 2]);
+        assert_eq!(heading_levels, vec![1, 2]);
     }
 
     #[test]
@@ -64,8 +68,9 @@ mod tests {
         let html = "<h1>H1</h1><h2>H2</h2><h3>H3</h3><h4>H4</h4><h5>H5</h5><h6>H6</h6>";
         let HtmlOut {
             markdown,
-            headings,
+            heading_contents,
             heading_lines,
+            heading_levels,
             ..
         } = parse(html);
 
@@ -73,8 +78,9 @@ mod tests {
             markdown,
             "# H1\n## H2\n### H3\n#### H4\n##### H5\n###### H6"
         );
-        assert_eq!(headings, vec!["H1", "H2", "H3", "H4", "H5", "H6"]);
+        assert_eq!(heading_contents, vec!["H1", "H2", "H3", "H4", "H5", "H6"]);
         assert_eq!(heading_lines, vec![1, 2, 3, 4, 5, 6]);
+        assert_eq!(heading_levels, vec![1, 2, 3, 4, 5, 6]);
     }
 
     #[test]
@@ -82,8 +88,9 @@ mod tests {
         let html = "<h1>Main Title</h1><p>Intro text</p><h2>Subheading</h2><p>More text</p>";
         let HtmlOut {
             markdown,
-            headings,
+            heading_contents,
             heading_lines,
+            heading_levels,
             ..
         } = parse(html);
 
@@ -91,8 +98,9 @@ mod tests {
             markdown,
             "# Main Title\nIntro text\n## Subheading\nMore text"
         );
-        assert_eq!(headings, vec!["Main Title", "Subheading"]);
+        assert_eq!(heading_contents, vec!["Main Title", "Subheading"]);
         assert_eq!(heading_lines, vec![1, 3]);
+        assert_eq!(heading_levels, vec![1, 2]);
     }
 
     #[test]
@@ -100,14 +108,16 @@ mod tests {
         let html = "<h1>H1</h1><h2>H2</h2><h1>Another H1</h1>";
         let HtmlOut {
             markdown,
-            headings,
+            heading_contents,
             heading_lines,
+            heading_levels,
             ..
         } = parse(html);
 
         assert_eq!(markdown, "# H1\n## H2\n# Another H1");
-        assert_eq!(headings, vec!["H1", "H2", "Another H1"]);
+        assert_eq!(heading_contents, vec!["H1", "H2", "Another H1"]);
         assert_eq!(heading_lines, vec![1, 2, 3]);
+        assert_eq!(heading_levels, vec![1, 2, 1]);
     }
 
     // STYLING (_italics_)
