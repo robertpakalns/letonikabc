@@ -51,8 +51,6 @@
         font = settings.font;
         theme = settings.theme;
         bgColor = chooseColor(settings.bgColor);
-
-        console.log(bgColor);
     };
 
     onMount(() => {

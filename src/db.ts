@@ -22,9 +22,15 @@ export interface MetadataRecord {
   last_position: number;
 }
 
+export interface Heading {
+  line: number;
+  content: string;
+  level: number;
+}
+
 export interface HeadingsRecord {
   hash: string;
-  headings: any[];
+  headings: Heading[];
 }
 
 const openDB = async (): Promise<IDBDatabase> => {
@@ -248,7 +254,13 @@ export const addHeadings = async (
     const { hash } = record;
 
     request.onsuccess = () => res({ hash });
-    request.onerror = () => rej(request.error);
+    request.onerror = () => {
+      if (request.error?.name === "ConstraintError") {
+        res({ hash, error: Errors.Duplicate });
+      } else {
+        rej(request.error);
+      }
+    };
   });
 };
 

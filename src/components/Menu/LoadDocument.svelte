@@ -4,6 +4,7 @@
         deleteMetadata,
         getAllMetadata,
         updateMetadata,
+        deleteHeadings,
     } from "@/db";
     import { exportMarkdown, formatBytes } from "@/utils";
     import type { MetadataRecord } from "@/db";
@@ -39,6 +40,7 @@
     const handleDelete = async (hash: string) => {
         await deleteMarkdown(hash);
         await deleteMetadata(hash);
+        await deleteHeadings(hash);
         records = records.filter((record) => record.hash !== hash);
     };
 
