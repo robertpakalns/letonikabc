@@ -17,6 +17,10 @@
     let headings = $state<Heading[]>();
     let showPanel = $state(false);
 
+    const scrollToId = (id: string): void => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    };
+
     onMount(async () => {
         updateReadPath(readHash);
 
@@ -70,7 +74,9 @@
 {/if}
 
 {#snippet h(record: Heading)}
-    <b>{record.content}</b>
+    <button onclick={() => scrollToId(record.line.toString())}>
+        {record.content}
+    </button>
 {/snippet}
 
 <!-- Insert raw HTML -->
@@ -100,8 +106,6 @@
 
         display: flex;
         flex-direction: column;
-        gap: 10px;
-        padding: 10px;
 
         background: var(--bg);
 
@@ -125,7 +129,7 @@
         overflow-y: auto;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 7px;
     }
 
     .errorCont {
@@ -134,8 +138,23 @@
         color: #ff4b53;
     }
 
-    b {
+    button:not(.btn) {
+        padding: 0.5rem;
+        font-weight: 600;
+        font-size: 1rem;
         word-break: break-word;
+        text-align: left;
+        background: transparent;
+        outline: none;
+        border: none;
+        cursor: pointer;
+        transition: 0.3s ease;
+        border-radius: 6px;
+
+        &:hover {
+            transform: scale(1.1);
+            background: gray;
+        }
     }
 
     @media (min-width: 769px) {

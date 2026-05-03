@@ -127,9 +127,11 @@ fn flush_buffer(
                     lines.push(format!("<p>{}</p>", text));
                 }
                 El::Heading(level) => {
-                    lines.push(format!("<h{level}>{}</h{level}>", text));
+                    let line_pos = lines.len() + 1;
 
-                    heading_lines.push(lines.len());
+                    lines.push(format!(r#"<h{level} id="{line_pos}">{}</h{level}>"#, text));
+
+                    heading_lines.push(line_pos);
                     heading_contents.push(text.clone());
                     heading_levels.push(level);
                 }
