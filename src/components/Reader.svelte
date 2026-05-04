@@ -74,7 +74,10 @@
 {/if}
 
 {#snippet h(record: Heading)}
-    <button onclick={() => scrollToId(record.line.toString())}>
+    <button
+        style={`padding-left: ${record.level * 4}px; font-size: ${1 - (record.level - 1) * 0.12}rem;`}
+        onclick={() => scrollToId(record.line.toString())}
+    >
         {record.content}
     </button>
 {/snippet}
