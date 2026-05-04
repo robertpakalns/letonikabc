@@ -19,7 +19,10 @@
 
 <div class="centerWrapper">
     <div class="centered">
-        <header>Letonika Better Client</header>
+        <header>
+            <img src="./icons/logo.svg" alt="Logo" />
+            <span>Letonika Better Client</span>
+        </header>
 
         <div class="buttons">
             <div class="btnWithCheckbox">
@@ -58,6 +61,21 @@
 
         input {
             cursor: pointer;
+        }
+    }
+
+    header {
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+
+        img {
+            height: 100%;
+        }
+
+        span {
+            font-size: 2rem;
         }
     }
 </style>

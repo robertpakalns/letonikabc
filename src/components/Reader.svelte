@@ -157,7 +157,7 @@
         }
     }
 
-    @media (min-width: 769px) {
+    @media (min-width: 900px) {
         .panel {
             transform: translateX(0);
             opacity: 1;
