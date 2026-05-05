@@ -132,23 +132,24 @@
 
     .panel {
         position: absolute;
-        top: 50px;
+        top: 0;
+        bottom: 0;
         left: 0;
-        height: calc(100% - 70px);
+        height: calc(100% - 50px);
         max-width: 100px;
+
+        padding-top: 50px;
 
         display: flex;
         flex-direction: column;
 
-        background: var(--bg);
+        background: color-mix(in srgb, var(--bg) 80%, transparent);
 
         transform: translateX(-100%);
         opacity: 0;
         pointer-events: none;
 
-        transition:
-            transform 0.25s ease,
-            opacity 0.2s ease;
+        transition: 0.3s ease;
     }
 
     .panel.open {
