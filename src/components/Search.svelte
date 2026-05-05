@@ -19,6 +19,41 @@
         return map;
     };
 
+    const CONTEXT = 50;
+
+    const sliceWithContext = (
+        line: string,
+        matches: Match[],
+    ): { text: string; matches: Match[] }[] => {
+        return matches.map((m) => {
+            const rawStart = Math.max(0, m.start - CONTEXT);
+            const rawEnd = Math.min(line.length, m.end + CONTEXT);
+
+            const hasPrefix = rawStart > 0;
+            const hasSuffix = rawEnd < line.length;
+
+            const prefix = hasPrefix ? "…" : "";
+            const suffix = hasSuffix ? "…" : "";
+
+            return {
+                text: prefix + line.slice(rawStart, rawEnd) + suffix,
+                matches: [
+                    {
+                        start: m.start - rawStart + prefix.length,
+                        end: m.end - rawStart + prefix.length,
+                    },
+                ],
+            };
+        });
+    };
+
+    const trimLine = (line: string, maxLen = 120): string => {
+        if (line.length <= maxLen) return escapeHtml(line);
+
+        const slice = line.slice(0, maxLen);
+        return escapeHtml(slice) + "…";
+    };
+
     const escapeHtml = (str: string): string => {
         return str
             .replaceAll("&", "&amp;")
@@ -99,10 +134,15 @@
                     {@const actualLine = start + i}
 
                     <div class="line" class:active={actualLine === g.line}>
-                        {@html highlight(
-                            lineText,
-                            actualLine === g.line ? g.matches : [],
-                        )}
+                        {#if actualLine === g.line}
+                            {#each sliceWithContext(lineText, g.matches) as seg}
+                                <div class="segment">
+                                    {@html highlight(seg.text, seg.matches)}
+                                </div>
+                            {/each}
+                        {:else}
+                            <div>{@html trimLine(lineText)}</div>
+                        {/if}
                     </div>
                 {/each}
             </div>
