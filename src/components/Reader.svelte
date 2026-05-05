@@ -6,6 +6,7 @@
     import { parse_md } from "@wasm/app";
     import Search from "./Search.svelte";
     import type { Heading } from "@/db";
+    import Modal from "./Modal.svelte";
 
     const { goBack, readHash, displayError } = $props<{
         goBack: () => void;
@@ -26,6 +27,9 @@
 
     let panelEl: HTMLDivElement | null = null;
     let toggleBtn: HTMLButtonElement | null = null;
+
+    // Modal
+    let open = $state(false);
 
     const handleClick = (e: MouseEvent) => {
         if (!showPanel) return;
@@ -89,14 +93,19 @@
     });
 </script>
 
-<button class="btn back" onclick={goBack}>Back</button>
-<button
-    class="btn toggle"
-    bind:this={toggleBtn}
-    onclick={() => (showPanel = !showPanel)}
->
-    ×
-</button>
+<div class="toolbar">
+    <button class="btn back" onclick={goBack}>Back</button>
+
+    <button class="btn" onclick={() => (open = true)}>Search</button>
+
+    <button
+        class="btn toggle"
+        bind:this={toggleBtn}
+        onclick={() => (showPanel = !showPanel)}
+    >
+        ×
+    </button>
+</div>
 
 <div class="panel" bind:this={panelEl} class:open={showPanel}>
     <div class="headings">
@@ -128,20 +137,20 @@
 <!-- Insert raw HTML -->
 <div class="reader">{@html content}</div>
 
-<Search />
+<Modal bind:open onClose={() => (open = false)}>
+    <Search {readHash} />
+</Modal>
 
 <style>
-    .toggle {
-        position: absolute;
-        top: 10px;
-        left: 80px;
-        z-index: 10;
-    }
-
-    .back {
+    .toolbar {
         position: absolute;
         top: 10px;
         left: 10px;
+
+        display: flex;
+        gap: 8px;
+        align-items: center;
+
         z-index: 10;
     }
 
