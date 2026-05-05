@@ -56,9 +56,6 @@
             return;
         }
 
-        const headingsRecord = await getHeadings(readHash);
-        headings = headingsRecord?.headings;
-
         const { html, heading_levels, heading_lines, heading_contents } =
             parse_md(data.value);
 
@@ -69,6 +66,9 @@
                 level: heading_levels[i],
             }),
         );
+
+        const headingsRecord = await getHeadings(readHash);
+        headings = headingsRecord?.headings || headingsArr;
 
         await addHeadings({ hash: readHash, headings: headingsArr });
 
