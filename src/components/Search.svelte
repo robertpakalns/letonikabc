@@ -7,10 +7,25 @@
 
     type Match = { start: number; end: number };
 
+    const CONTEXT = 50;
+    const CONTEXT_LINES = 2;
+
+    let result = $state("");
+
+    let query = $state("");
+    let caseSensitive = $state(true);
+    let diacriticSensitive = $state(true);
+
+    const escapeHtml = (str: string): string =>
+        str
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;");
+
     const buildLineIndex = (str: string): number[] => {
         const map: number[] = [];
-
         let line = 0;
+
         for (let i = 0; i < str.length; i++) {
             map[i] = line;
             if (str[i] === "\n") line++;
@@ -19,7 +34,21 @@
         return map;
     };
 
-    const CONTEXT = 50;
+    const highlight = (line: string, matches: Match[]): string => {
+        if (!matches.length) return escapeHtml(line);
+
+        let out = "";
+        let cursor = 0;
+
+        for (const m of matches) {
+            out += escapeHtml(line.slice(cursor, m.start));
+            out += `<mark>${escapeHtml(line.slice(m.start, m.end))}</mark>`;
+            cursor = m.end;
+        }
+
+        out += escapeHtml(line.slice(cursor));
+        return out;
+    };
 
     const sliceWithContext = (
         line: string,
@@ -49,43 +78,18 @@
 
     const trimLine = (line: string, maxLen = 120): string => {
         if (line.length <= maxLen) return escapeHtml(line);
-
-        const slice = line.slice(0, maxLen);
-        return escapeHtml(slice) + "…";
+        return escapeHtml(line.slice(0, maxLen)) + "…";
     };
 
-    const escapeHtml = (str: string): string => {
-        return str
-            .replaceAll("&", "&amp;")
-            .replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;");
-    };
+    let matches = $derived(
+        query
+            ? find_substr(result, query, !diacriticSensitive, caseSensitive)
+            : [],
+    );
 
-    const highlight = (line: string, matches: Match[]): string => {
-        if (!matches.length) return escapeHtml(line);
-
-        let out = "";
-        let cursor = 0;
-
-        for (const m of matches) {
-            const start = m.start;
-            const end = m.end;
-
-            out += escapeHtml(line.slice(cursor, start));
-            out += `<mark>${escapeHtml(line.slice(start, end))}</mark>`;
-
-            cursor = end;
-        }
-
-        out += escapeHtml(line.slice(cursor));
-        return out;
-    };
-
-    let result = $state<string>("");
-    const query = "mind";
-    let matches = $derived(find_substr(result, query, true, false));
     let lines = $derived(result.split("\n"));
     let lineIndex = $derived(buildLineIndex(result));
+    let matchCount = $derived(matches.length);
 
     let grouped = $derived(
         (() => {
@@ -123,11 +127,32 @@
     });
 </script>
 
+<div class="controls">
+    <input
+        class="textInput"
+        type="text"
+        placeholder="Search..."
+        bind:value={query}
+    />
+
+    <span class="count">{matchCount}</span>
+
+    <label>
+        <input type="checkbox" bind:checked={caseSensitive} />
+        Case-sensitive
+    </label>
+
+    <label>
+        <input type="checkbox" bind:checked={diacriticSensitive} />
+        Diacritic-sensitive
+    </label>
+</div>
+
 <div class="results">
-    {#if result}
+    {#if result && grouped.length}
         {#each grouped as g}
-            {@const start = Math.max(0, g.line - 2)}
-            {@const end = Math.min(lines.length - 1, g.line + 2)}
+            {@const start = Math.max(0, g.line - CONTEXT_LINES)}
+            {@const end = Math.min(lines.length - 1, g.line + CONTEXT_LINES)}
 
             <div class="block">
                 {#each lines.slice(start, end + 1) as lineText, i}
@@ -153,6 +178,28 @@
 </div>
 
 <style>
+    .controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 10px;
+        font-family: monospace;
+
+        input[type="text"] {
+            flex: 1;
+            padding: 4px 6px;
+            font-family: monospace;
+        }
+
+        label {
+            font-size: 12px;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+    }
+
     .results {
         font-family: monospace;
         padding: 10px;
@@ -183,7 +230,18 @@
         background: rgba(255, 255, 0, 0.08);
     }
 
+    .segment {
+        margin-bottom: 2px;
+    }
+
     .empty {
         opacity: 0.6;
+    }
+
+    .textInput {
+        background: transparent;
+        outline: none;
+        border: none;
+        border-bottom: 1px solid gray;
     }
 </style>
