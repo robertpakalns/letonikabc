@@ -15,7 +15,9 @@
     let content = $state<string>("");
     let error = $state<string | undefined>();
     let headings = $state<Heading[]>();
+
     let showPanel = $state(false);
+    let showError = $state(true);
 
     const scrollToId = (id: string): void => {
         document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -37,6 +39,10 @@
         ) {
             showPanel = false;
         }
+    };
+
+    const closePopup = (): void => {
+        showError = false;
     };
 
     onMount(async () => {
@@ -99,8 +105,14 @@
     </div>
 </div>
 
-{#if error}
-    <div class="errorCont">{error}</div>
+{#if error && showError}
+    <div class="errorCont">
+        <span>
+            {error}
+        </span>
+
+        <button class="btn errorBtn" onclick={closePopup}>×</button>
+    </div>
 {/if}
 
 {#snippet h(record: Heading)}
@@ -168,8 +180,19 @@
 
     .errorCont {
         margin: 10px;
-        text-align: center;
-        color: #ff4b53;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+
+        span {
+            color: #ff4b53;
+        }
+
+        .errorBtn {
+            padding: 0.2rem 0.4rem;
+        }
     }
 
     button:not(.btn) {
