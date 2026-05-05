@@ -1,10 +1,10 @@
 <script lang="ts">
     import { getMarkdown, getHeadings, addHeadings } from "@/db";
+    import { onDestroy, onMount } from "svelte";
     import { updateReadPath } from "@/router";
     import { Errors } from "@/errorHandler";
     import { parse_md } from "@wasm/app";
     import type { Heading } from "@/db";
-    import { onMount } from "svelte";
 
     const { goBack, readHash, displayError } = $props<{
         goBack: () => void;
@@ -19,6 +19,24 @@
 
     const scrollToId = (id: string): void => {
         document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    let panelEl: HTMLDivElement | null = null;
+    let toggleBtn: HTMLButtonElement | null = null;
+
+    const handleClick = (e: MouseEvent) => {
+        if (!showPanel) return;
+
+        const target = e.target as Node;
+
+        if (
+            panelEl &&
+            !panelEl.contains(target) &&
+            toggleBtn &&
+            !toggleBtn.contains(target)
+        ) {
+            showPanel = false;
+        }
     };
 
     onMount(async () => {
@@ -55,13 +73,25 @@
         await addHeadings({ hash: readHash, headings: headingsArr });
 
         content = html;
+
+        document.addEventListener("click", handleClick);
+    });
+
+    onDestroy(() => {
+        document.removeEventListener("click", handleClick);
     });
 </script>
 
 <button class="btn back" onclick={goBack}>Back</button>
-<button class="btn toggle" onclick={() => (showPanel = !showPanel)}> × </button>
+<button
+    class="btn toggle"
+    bind:this={toggleBtn}
+    onclick={() => (showPanel = !showPanel)}
+>
+    ×
+</button>
 
-<div class="panel" class:open={showPanel}>
+<div class="panel" bind:this={panelEl} class:open={showPanel}>
     <div class="headings">
         {#each headings as record}
             {@render h(record)}
