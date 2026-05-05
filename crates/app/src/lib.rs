@@ -85,3 +85,8 @@ impl MdOutput {
         self.inner.heading_levels.clone()
     }
 }
+
+#[wasm_bindgen]
+pub fn find_substr(str: &str, substr: &str, diacritic: bool, case_sensitive: bool) -> Vec<u32> {
+    reader::find_substr(str, substr, diacritic, case_sensitive)
+}

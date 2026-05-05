@@ -4,6 +4,7 @@
     import { updateReadPath } from "@/router";
     import { Errors } from "@/errorHandler";
     import { parse_md } from "@wasm/app";
+    import Search from "./Search.svelte";
     import type { Heading } from "@/db";
 
     const { goBack, readHash, displayError } = $props<{
@@ -126,6 +127,8 @@
 
 <!-- Insert raw HTML -->
 <div class="reader">{@html content}</div>
+
+<Search />
 
 <style>
     .toggle {

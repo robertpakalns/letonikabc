@@ -38,7 +38,7 @@ mod tests {
     #[test]
     fn headings() {
         let md = "# H1\n## H2\n### H3\n#### H4\n##### H5\n###### H6";
-        let expected = "<h1>H1</h1><h2>H2</h2><h3>H3</h3><h4>H4</h4><h5>H5</h5><h6>H6</h6>";
+        let expected = r#"<h1 id="1">H1</h1><h2 id="2">H2</h2><h3 id="3">H3</h3><h4 id="4">H4</h4><h5 id="5">H5</h5><h6 id="6">H6</h6>"#;
         let MdOut {
             html,
             heading_lines,
@@ -55,7 +55,7 @@ mod tests {
     #[test]
     fn mixed_content() {
         let md = "# H1\nNormal text\n## H2";
-        let expected = "<h1>H1</h1><p>Normal text</p><h2>H2</h2>";
+        let expected = r#"<h1 id="1">H1</h1><p>Normal text</p><h2 id="3">H2</h2>"#;
         let MdOut {
             html,
             heading_lines,
@@ -203,7 +203,7 @@ mod tests {
     #[test]
     fn heading_with_italics() {
         let md = "# Heading with _italic_ text";
-        let expected = "<h1>Heading with <i>italic</i> text</h1>";
+        let expected = r#"<h1 id="1">Heading with <i>italic</i> text</h1>"#;
         let MdOut {
             html,
             heading_contents,
