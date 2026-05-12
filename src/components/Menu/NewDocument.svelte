@@ -111,9 +111,16 @@
                 Get a raw document from
                 <a href="https://www.letonika.lv" target="_blank">
                     letonika.lv
-                </a>
+                </a>:
+                <ul>
+                    <li>
+                        Copy this
+                        <a href="./getBook.js" target="_blank">script</a>
+                    </li>
+                    <li>Execute it in the browser's console</li>
+                    <li>Save the document on local machine</li>
+                </ul>
             </li>
-            <li>Save it on local machine</li>
             <li>Click "Open"</li>
             <li>Choose the document</li>
         </ol>
@@ -145,6 +152,7 @@
 />
 
 <style>
+    ul,
     ol {
         padding-left: 2rem;
     }
